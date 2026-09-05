@@ -1063,7 +1063,14 @@ function HomePage(_ref6) {
   var featured = INITIAL_ROOMS.slice(0, 3);
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("section", {
     className: "hero"
-  }, /*#__PURE__*/React.createElement(BridgeIllustration, null), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bridge-illust",
+    style: {
+      backgroundImage: "linear-gradient(180deg, rgba(42,33,26,0.15) 0%, rgba(42,33,26,0.05) 45%, rgba(246,241,228,0.95) 100%), url('images/hero-bridge.webp')",
+      backgroundSize: "cover",
+      backgroundPosition: "center 65%"
+    }
+  }), /*#__PURE__*/React.createElement("div", {
     className: "hero-content container"
   }, /*#__PURE__*/React.createElement("p", {
     className: "eyebrow-plain"
