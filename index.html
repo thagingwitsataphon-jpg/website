@@ -431,8 +431,8 @@ var AMENITY_ICONS = {
 };
 var INITIAL_ROOMS = [{
   id: "r1",
+  images: ["images/r1-1.webp", "images/r1-2.jpg", "images/r1-3.jpg"],
   name: "สามประสบ รีสอร์ท",
- image: "1.webp",  
   type: "รีสอร์ทริมน้ำ",
   price: 1000,
   priceLabel: "1,000–3,000 บาท/คืน",
@@ -469,6 +469,7 @@ var INITIAL_ROOMS = [{
   cancelPolicy: "ยกเลิกก่อนเข้าพัก 72 ชั่วโมง คืนเงินมัดจำเต็มจำนวนหักค่าดำเนินการ 5% หากน้อยกว่า 72 ชั่วโมงไม่สามารถคืนเงินมัดจำได้"
 }, {
   id: "r2",
+  images: ["images/r2-1.jpg", "images/r2-2.jpg", "images/r2-3.jpg"],
   name: "บ้านมอญนอนเล่น",
   type: "เกสต์เฮาส์",
   price: 590,
@@ -500,6 +501,7 @@ var INITIAL_ROOMS = [{
   cancelPolicy: "ยกเลิกฟรีก่อนเข้าพัก 1 วัน"
 }, {
   id: "r3",
+  images: ["images/r3-1.webp", "images/r3-2.jpg", "images/r3-3.jpg"],
   name: "เบอมิซอินน์ รีสอร์ท",
   type: "ห้องมาตรฐาน",
   price: 400,
@@ -537,6 +539,7 @@ var INITIAL_ROOMS = [{
   cancelPolicy: "ยกเลิกฟรีก่อนเข้าพัก 1 วัน"
 }, {
   id: "r4",
+  images: ["images/r4-1.jpg", "images/r4-2.jpg", "images/r4-3.jpg"],
   name: "วังกะ รีสอร์ท",
   type: "รีสอร์ท",
   price: 861,
@@ -568,6 +571,7 @@ var INITIAL_ROOMS = [{
   cancelPolicy: "เงื่อนไขการยกเลิกและคืนเงินขึ้นอยู่กับประเภทห้องพักและช่องทางการจอง กรุณาตรวจสอบกับรีสอร์ทก่อนยืนยัน"
 }, {
   id: "r5",
+  images: ["images/r5-1.webp", "images/r5-2.jpg", "images/r5-3.jpg"],
   name: "มาชิลล์ รีสอร์ท",
   type: "รีสอร์ท",
   price: 583,
@@ -593,6 +597,7 @@ var INITIAL_ROOMS = [{
   cancelPolicy: "ราคาและเงื่อนไขอาจแตกต่างกันตามฤดูกาล กรุณาตรวจสอบกับรีสอร์ทก่อนจอง"
 }, {
   id: "r6",
+  images: ["images/r6-1.jpeg", "images/r6-2.jpeg", "images/r6-3.jpeg"],
   name: "สังขละวิลเลจ รีสอร์ท",
   type: "เรือนครอบครัว",
   price: 950,
@@ -626,27 +631,45 @@ var INITIAL_ROOMS = [{
 var ATTRACTIONS = [{
   name: "สะพานมอญ (สะพานอุตตมานุสรณ์)",
   distance: "0 ม.",
-  desc: "สะพานไม้ข้ามแม่น้ำซองกาเลียที่ยาวที่สุดในประเทศไทย จุดชมพระอาทิตย์ขึ้นที่ดีที่สุดในหมู่บ้าน"
+  desc: "สะพานไม้ข้ามแม่น้ำซองกาเลียที่ยาวที่สุดในประเทศไทย จุดชมพระอาทิตย์ขึ้นที่ดีที่สุดในหมู่บ้าน",
+  lat: 15.1434006,
+  lng: 98.4498595,
+  mapUrl: "https://maps.app.goo.gl/VWSb7SatMfm382qg8"
 }, {
   name: "วัดวังก์วิเวการาม",
   distance: "800 ม.",
-  desc: "วัดเก่าแก่ริมแม่น้ำ ประดิษฐานพระพุทธรูปหลวงพ่ออุตตมะ ศูนย์รวมจิตใจของชาวมอญ"
+  desc: "วัดเก่าแก่ริมแม่น้ำ ประดิษฐานพระพุทธรูปหลวงพ่ออุตตมะ ศูนย์รวมจิตใจของชาวมอญ",
+  lat: 15.1333237,
+  lng: 98.4447879,
+  mapUrl: "https://maps.app.goo.gl/NFn5naRpLJ4MCeYS8"
 }, {
   name: "เจดีย์พุทธคยาจำลอง",
   distance: "1.2 กม.",
-  desc: "เจดีย์สีทองริมอ่างเก็บน้ำ มองเห็นเมืองบาดาลได้ในฤดูแล้ง"
+  desc: "เจดีย์สีทองริมอ่างเก็บน้ำ มองเห็นเมืองบาดาลได้ในฤดูแล้ง",
+  lat: 15.1278854,
+  lng: 98.4505453,
+  mapUrl: "https://maps.app.goo.gl/QCmHZ1coFpPJHM2p6"
 }, {
   name: "ตลาดมอญเช้า",
   distance: "150 ม.",
-  desc: "ตลาดเช้าท้องถิ่น ขายอาหารมอญและของพื้นเมือง เปิดตั้งแต่ตี 5"
+  desc: "ตลาดเช้าท้องถิ่น ขายอาหารมอญและของพื้นเมือง เปิดตั้งแต่ตี 5",
+  lat: 15.1371773,
+  lng: 98.4478189,
+  mapUrl: "https://maps.app.goo.gl/cGZNrMpJCmUkckZF7"
 }, {
   name: "จุดชมวิวเมืองบาดาล",
   distance: "2 กม.",
-  desc: "ซากวัดเก่าที่จมอยู่ใต้น้ำ โผล่พ้นผิวน้ำให้เห็นในช่วงหน้าแล้ง"
+  desc: "ซากวัดเก่าที่จมอยู่ใต้น้ำ โผล่พ้นผิวน้ำให้เห็นในช่วงหน้าแล้ง",
+  lat: 15.1152109,
+  lng: 98.4616238,
+  mapUrl: "https://maps.app.goo.gl/rKcfwpWmNm86idG86"
 }, {
   name: "น้ำตกเกริงกระเวีย",
   distance: "18 กม.",
-  desc: "น้ำตกในป่าเขียวขจี เหมาะสำหรับทริปครึ่งวัน"
+  desc: "น้ำตกในป่าเขียวขจี เหมาะสำหรับทริปครึ่งวัน",
+  lat: 14.981598,
+  lng: 98.632829,
+  mapUrl: "https://maps.app.goo.gl/pPbB9pMrquW8BDLu5"
 }];
 var INITIAL_REVIEWS = [{
   id: "v1",
@@ -1151,7 +1174,18 @@ function HomePage(_ref6) {
 /* ------------------------------------------------------------------ */
 
 function RoomThumb(_ref7) {
-  var seed = _ref7.seed;
+  var seed = _ref7.seed,
+    image = _ref7.image;
+  if (image) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "room-thumb",
+      style: {
+        backgroundImage: "url(".concat(image, ")"),
+        backgroundSize: "cover",
+        backgroundPosition: "center"
+      }
+    });
+  }
   // deterministic soft gradient thumbnail per room, keeps a consistent illustrated look
   var hues = [["#2E5F58", "#7C8B5B"], ["#6B4226", "#C98A3B"], ["#4A3527", "#2E5F58"], ["#7C8B5B", "#F0EAD6"], ["#C98A3B", "#4A3527"], ["#2E5F58", "#C98A3B"]];
   var _hues = _slicedToArray(hues[seed % hues.length], 2),
@@ -1186,7 +1220,8 @@ function RoomCard(_ref8) {
   return /*#__PURE__*/React.createElement("div", {
     className: "room-card"
   }, /*#__PURE__*/React.createElement(RoomThumb, {
-    seed: idx
+    seed: idx,
+    image: room.images && room.images[0]
   }), /*#__PURE__*/React.createElement("div", {
     className: "room-card-body"
   }, /*#__PURE__*/React.createElement("div", {
@@ -1355,13 +1390,16 @@ function DetailPage(_ref0) {
   }), " \u0E01\u0E25\u0E31\u0E1A\u0E44\u0E1B\u0E2B\u0E19\u0E49\u0E32\u0E04\u0E49\u0E19\u0E2B\u0E32"), /*#__PURE__*/React.createElement("div", {
     className: "detail-gallery"
   }, /*#__PURE__*/React.createElement(RoomThumb, {
-    seed: idx
+    seed: idx,
+    image: room.images && room.images[0]
   }), /*#__PURE__*/React.createElement("div", {
     className: "detail-gallery-side"
   }, /*#__PURE__*/React.createElement(RoomThumb, {
-    seed: idx + 1
+    seed: idx + 1,
+    image: room.images && room.images[1]
   }), /*#__PURE__*/React.createElement(RoomThumb, {
-    seed: idx + 2
+    seed: idx + 2,
+    image: room.images && room.images[2]
   }))), /*#__PURE__*/React.createElement("div", {
     className: "detail-layout"
   }, /*#__PURE__*/React.createElement("div", {
@@ -1843,7 +1881,13 @@ function MapPage() {
       className: "muted"
     }, "\u0E2B\u0E48\u0E32\u0E07\u0E08\u0E32\u0E01\u0E17\u0E35\u0E48\u0E1E\u0E31\u0E01 ", a.distance), /*#__PURE__*/React.createElement("p", {
       className: "body-text small"
-    }, a.desc)));
+    }, a.desc), a.mapUrl && /*#__PURE__*/React.createElement("a", {
+      href: a.mapUrl,
+      target: "_blank",
+      rel: "noopener noreferrer",
+      className: "link-more",
+      style: { fontSize: "13px", marginTop: "4px" }
+    }, /*#__PURE__*/React.createElement(Navigation, { size: 14 }), "\u0E14\u0E39\u0E15\u0E33\u0E41\u0E2B\u0E19\u0E48\u0E07\u0E43\u0E19 Google Maps")));
   })));
 }
 
