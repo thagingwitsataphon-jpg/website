@@ -335,7 +335,8 @@ function _objectWithoutProperties(e, t) { if (null == e) return {}; var o, r, i 
 function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 var _React = React,
   useState = _React.useState,
-  useMemo = _React.useMemo;
+  useMemo = _React.useMemo,
+  useEffect = _React.useEffect;
 function makeIcon(emoji) {
   return function IconCmp(_ref) {
     var _ref$size = _ref.size,
@@ -772,6 +773,24 @@ function nightsBetween(inD, outD) {
 }
 function genCode() {
   return "RM" + Math.random().toString(36).slice(2, 8).toUpperCase();
+}
+var DEFAULT_UNITS_PER_ROOM_TYPE = 4;
+function datesOverlap(startA, endA, startB, endB) {
+  if (!startA || !endA || !startB || !endB) return false;
+  return new Date(startA) < new Date(endB) && new Date(startB) < new Date(endA);
+}
+function unitsBookedFor(bookings, roomId, roomTypeName, checkin, checkout, excludeCode) {
+  if (!checkin || !checkout) return 0;
+  return bookings.filter(function (b) {
+    return b.roomId === roomId && b.roomTypeName === roomTypeName && b.status !== "ยกเลิกแล้ว" && b.code !== excludeCode && datesOverlap(checkin, checkout, b.checkin, b.checkout);
+  }).reduce(function (sum, b) {
+    return sum + (Number(b.roomsQty) || 1);
+  }, 0);
+}
+function availableUnitsFor(room, roomType, bookings, checkin, checkout, excludeCode) {
+  var total = roomType && roomType.totalUnits ? roomType.totalUnits : DEFAULT_UNITS_PER_ROOM_TYPE;
+  var booked = unitsBookedFor(bookings || [], room.id, roomType ? roomType.name : null, checkin, checkout, excludeCode);
+  return Math.max(0, total - booked);
 }
 
 /* ------------------------------------------------------------------ */
@@ -1529,7 +1548,8 @@ function BookingPage(_ref1) {
   var roomId = _ref1.roomId,
     go = _ref1.go,
     searchForm = _ref1.searchForm,
-    addBooking = _ref1.addBooking;
+    addBooking = _ref1.addBooking,
+    bookings = _ref1.bookings;
   var room = INITIAL_ROOMS.find(function (r) {
     return r.id === roomId;
   }) || INITIAL_ROOMS[0];
@@ -1551,13 +1571,35 @@ function BookingPage(_ref1) {
     _useState10 = _slicedToArray(_useState1, 2),
     error = _useState10[0],
     setError = _useState10[1];
+  var _useState1b = useState(false),
+    _useState10b = _slicedToArray(_useState1b, 2),
+    submitting = _useState10b[0],
+    setSubmitting = _useState10b[1];
   var nights = nightsBetween(form.checkin, form.checkout);
   var hasRoomTypes = room.roomTypes && room.roomTypes.length > 0;
   var selectedRoomType = hasRoomTypes ? room.roomTypes[form.roomTypeIndex] || room.roomTypes[0] : null;
   var unitPrice = selectedRoomType && selectedRoomType.price ? selectedRoomType.price : room.price;
   var total = nights * unitPrice * form.roomsQty;
+  var allBookings = bookings || [];
+  var availableUnits = form.checkin && form.checkout && nights > 0 ? availableUnitsFor(room, selectedRoomType, allBookings, form.checkin, form.checkout) : null;
+  var qtyOptions = Array.from({
+    length: Math.max(1, Math.min(3, availableUnits === null ? 3 : availableUnits))
+  }, function (_, i) {
+    return i + 1;
+  });
+  var maxQty = qtyOptions[qtyOptions.length - 1];
+  useEffect(function () {
+    if (form.roomsQty > maxQty) {
+      setForm(function (f) {
+        return _objectSpread(_objectSpread({}, f), {}, {
+          roomsQty: maxQty
+        });
+      });
+    }
+  }, [maxQty]);
   function submit(e) {
     e.preventDefault();
+    if (submitting) return;
     if (!form.checkin || !form.checkout || nights <= 0) {
       setError("กรุณาเลือกวันเข้าพักและวันออกให้ถูกต้อง");
       return;
@@ -1566,7 +1608,18 @@ function BookingPage(_ref1) {
       setError("กรุณากรอกชื่อผู้จองและเบอร์โทรศัพท์");
       return;
     }
+    // ตรวจสอบห้องว่างจริงอีกครั้งก่อนยืนยัน เพื่อป้องกันการจองซ้ำ/จองเกินจำนวนห้องที่มี
+    var currentAvailable = availableUnitsFor(room, selectedRoomType, allBookings, form.checkin, form.checkout);
+    if (currentAvailable <= 0) {
+      setError("ขออภัย ห้องประเภทนี้ไม่ว่างในช่วงวันที่เลือกแล้ว กรุณาเลือกวันที่หรือประเภทห้องอื่น");
+      return;
+    }
+    if (form.roomsQty > currentAvailable) {
+      setError("ห้องว่างเหลือเพียง " + currentAvailable + " ห้องสำหรับวันที่เลือก กรุณาลดจำนวนห้องหรือเปลี่ยนวันที่");
+      return;
+    }
     setError("");
+    setSubmitting(true);
     var booking = _objectSpread(_objectSpread({
       code: genCode(),
       roomId: room.id,
@@ -1634,7 +1687,14 @@ function BookingPage(_ref1) {
       key: rt.name,
       value: i
     }, rt.name, rt.price ? " \u2014 \u0E3F" + money(rt.price) + "/\u0E04\u0E37\u0E19" : "");
-  }))), /*#__PURE__*/React.createElement("div", {
+  })), availableUnits !== null && /*#__PURE__*/React.createElement("p", {
+    className: "small-note",
+    style: {
+      color: availableUnits > 0 ? "var(--teal)" : "#B23A2E",
+      fontWeight: 600,
+      margin: "6px 0 0"
+    }
+  }, availableUnits > 0 ? "\u0E2B\u0E49\u0E2D\u0E07\u0E27\u0E48\u0E32\u0E07\u0E2A\u0E33\u0E2B\u0E23\u0E31\u0E1A\u0E27\u0E31\u0E19\u0E17\u0E35\u0E48\u0E19\u0E35\u0E49: \u0E40\u0E2B\u0E25\u0E37\u0E2D " + availableUnits + " \u0E2B\u0E49\u0E2D\u0E07" : "\u0E2B\u0E49\u0E2D\u0E07\u0E1B\u0E23\u0E30\u0E40\u0E20\u0E17\u0E19\u0E35\u0E49\u0E40\u0E15\u0E47\u0E21\u0E43\u0E19\u0E0A\u0E48\u0E27\u0E07\u0E27\u0E31\u0E19\u0E17\u0E35\u0E48\u0E19\u0E35\u0E49 \u0E01\u0E23\u0E38\u0E13\u0E32\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E27\u0E31\u0E19\u0E17\u0E35\u0E48\u0E2D\u0E37\u0E48\u0E19")), /*#__PURE__*/React.createElement("div", {
     className: "form-row two"
   }, /*#__PURE__*/React.createElement("div", {
     className: "field"
@@ -1663,7 +1723,7 @@ function BookingPage(_ref1) {
         roomsQty: Number(e.target.value)
       }));
     }
-  }, [1, 2, 3].map(function (n) {
+  }, qtyOptions.map(function (n) {
     return /*#__PURE__*/React.createElement("option", {
       key: n,
       value: n
@@ -1727,10 +1787,13 @@ function BookingPage(_ref1) {
   }, /*#__PURE__*/React.createElement("span", null, "\u0E22\u0E2D\u0E14\u0E23\u0E27\u0E21"), /*#__PURE__*/React.createElement("span", null, "\u0E3F", money(total)))), /*#__PURE__*/React.createElement("button", {
     className: "btn btn-primary",
     type: "submit",
+    disabled: submitting || availableUnits === 0,
     style: {
-      width: "100%"
+      width: "100%",
+      opacity: submitting || availableUnits === 0 ? 0.6 : 1,
+      cursor: submitting || availableUnits === 0 ? "not-allowed" : "pointer"
     }
-  }, "\u0E22\u0E37\u0E19\u0E22\u0E31\u0E19\u0E04\u0E33\u0E02\u0E2D\u0E08\u0E2D\u0E07"), /*#__PURE__*/React.createElement("p", {
+  }, submitting ? "\u0E01\u0E33\u0E25\u0E31\u0E07\u0E1A\u0E31\u0E19\u0E17\u0E36\u0E01\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07..." : "\u0E22\u0E37\u0E19\u0E22\u0E31\u0E19\u0E04\u0E33\u0E02\u0E2D\u0E08\u0E2D\u0E07"), /*#__PURE__*/React.createElement("p", {
     className: "muted small-note"
   }, "\u0E17\u0E35\u0E21\u0E07\u0E32\u0E19\u0E08\u0E30\u0E15\u0E34\u0E14\u0E15\u0E48\u0E2D\u0E01\u0E25\u0E31\u0E1A\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E22\u0E37\u0E19\u0E22\u0E31\u0E19\u0E01\u0E32\u0E23\u0E0A\u0E33\u0E23\u0E30\u0E40\u0E07\u0E34\u0E19\u0E17\u0E32\u0E07\u0E42\u0E17\u0E23\u0E28\u0E31\u0E1E\u0E17\u0E4C\u0E2B\u0E23\u0E37\u0E2D LINE")));
 }
@@ -2659,6 +2722,26 @@ function App() {
   }
   function addBooking(b) {
     setBookings(function (prev) {
+      // กันบันทึกซ้ำหากรหัสจองนี้มีอยู่แล้ว (เช่น กดยืนยันซ้ำสองครั้งเร็ว ๆ)
+      if (prev.some(function (x) {
+        return x.code === b.code;
+      })) {
+        return prev;
+      }
+      // ตรวจสอบห้องว่างจริงอีกครั้งก่อนบันทึก ป้องกันการจองซ้อนเกินจำนวนห้องที่มี
+      var room = INITIAL_ROOMS.find(function (r) {
+        return r.id === b.roomId;
+      });
+      if (room) {
+        var roomType = room.roomTypes && room.roomTypes.find(function (rt) {
+          return rt.name === b.roomTypeName;
+        });
+        var available = availableUnitsFor(room, roomType, prev, b.checkin, b.checkout, b.code);
+        if (available < (Number(b.roomsQty) || 1)) {
+          // ห้องไม่พอแล้วในขณะที่บันทึกจริง ไม่เพิ่มการจองนี้
+          return prev;
+        }
+      }
       return [b].concat(_toConsumableArray(prev));
     });
   }
@@ -2711,7 +2794,8 @@ function App() {
     roomId: selectedRoomId,
     go: go,
     searchForm: searchForm,
-    addBooking: addBooking
+    addBooking: addBooking,
+    bookings: bookings
   }), page === "confirm" && /*#__PURE__*/React.createElement(ConfirmPage, {
     code: confirmCode,
     bookings: bookings,
