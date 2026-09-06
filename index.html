@@ -403,6 +403,9 @@ var Dumbbell = makeIcon("🏋️");
 var Tent = makeIcon("⛺");
 var Refrigerator = makeIcon("🧊");
 var ShowerHead = makeIcon("🚿");
+var Heart = makeIcon("❤️");
+var HeartOutline = makeIcon("🤍");
+var Bell = makeIcon("🔔");
 var Fan = makeIcon("🌬️");
 
 /* ------------------------------------------------------------------ */
@@ -779,6 +782,76 @@ var ADMIN_CREDENTIALS = {
   password: "sangkhla2569"
 };
 var DEFAULT_UNITS_PER_ROOM_TYPE = 4;
+var BOOKING_STATUS_ORDER = [{
+  status: "รอการยืนยันจากที่พัก",
+  emoji: "🟡",
+  label: "รอการยืนยัน",
+  cls: "pending"
+}, {
+  status: "ยืนยันแล้ว",
+  emoji: "🔵",
+  label: "ยืนยันแล้ว",
+  cls: "confirmed"
+}, {
+  status: "เข้าพักแล้ว",
+  emoji: "🟢",
+  label: "เข้าพักแล้ว",
+  cls: "confirmed"
+}, {
+  status: "ยกเลิกแล้ว",
+  emoji: "🔴",
+  label: "ยกเลิก",
+  cls: "cancelled"
+}, {
+  status: "รอชำระเงิน",
+  emoji: "⚠️",
+  label: "รอชำระเงิน",
+  cls: "pending"
+}];
+function bookingStatusMeta(status) {
+  return BOOKING_STATUS_ORDER.find(function (s) {
+    return s.status === status;
+  }) || {
+    status: status,
+    emoji: "🟡",
+    label: status || "รอการยืนยัน",
+    cls: "pending"
+  };
+}
+function buildNotifications(bookings, promos) {
+  var items = [];
+  (bookings || []).forEach(function (b) {
+    if (b.status === "ยืนยันแล้ว") {
+      items.push({
+        id: b.code + "-confirmed",
+        icon: "✅",
+        text: "การจอง #" + b.code + " ได้รับการยืนยันแล้ว"
+      });
+    }
+    if (b.status === "รอชำระเงิน") {
+      items.push({
+        id: b.code + "-pay",
+        icon: "⚠️",
+        text: "กรุณาชำระเงินสำหรับการจอง #" + b.code + " ภายในวันนี้"
+      });
+    }
+    if (b.slipVerified) {
+      items.push({
+        id: b.code + "-slip",
+        icon: "🧾",
+        text: "ที่พักตรวจสอบสลิปการโอนเงินของการจอง #" + b.code + " แล้ว"
+      });
+    }
+  });
+  if (promos && promos.length > 0) {
+    items.push({
+      id: "promo-" + promos[0].id,
+      icon: "🎉",
+      text: "โปรโมชั่นใหม่: " + promos[0].title
+    });
+  }
+  return items;
+}
 function datesOverlap(startA, endA, startB, endB) {
   if (!startA || !endA || !startB || !endB) return false;
   return new Date(startA) < new Date(endB) && new Date(startB) < new Date(endA);
@@ -1122,7 +1195,9 @@ function HomePage(_ref6) {
     rooms = _ref6.rooms,
     searchForm = _ref6.searchForm,
     setSearchForm = _ref6.setSearchForm,
-    doSearch = _ref6.doSearch;
+    doSearch = _ref6.doSearch,
+    favorites = _ref6.favorites,
+    onToggleFavorite = _ref6.onToggleFavorite;
   var featured = (rooms || INITIAL_ROOMS).slice(0, 3);
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("section", {
     className: "hero"
@@ -1215,6 +1290,8 @@ function HomePage(_ref6) {
     return /*#__PURE__*/React.createElement(RoomCard, {
       key: r.id,
       room: r,
+      isFavorite: !!(favorites && favorites.includes(r.id)),
+      onToggleFavorite: onToggleFavorite,
       onView: function onView() {
         return go("detail", r.id);
       }
@@ -1283,16 +1360,47 @@ function RoomThumb(_ref7) {
 }
 function RoomCard(_ref8) {
   var room = _ref8.room,
-    onView = _ref8.onView;
+    onView = _ref8.onView,
+    isFavorite = _ref8.isFavorite,
+    onToggleFavorite = _ref8.onToggleFavorite;
   var idx = INITIAL_ROOMS.findIndex(function (r) {
     return r.id === room.id;
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "room-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "relative"
+    }
   }, /*#__PURE__*/React.createElement(RoomThumb, {
     seed: idx,
     image: room.images && room.images[0]
-  }), /*#__PURE__*/React.createElement("div", {
+  }), onToggleFavorite && /*#__PURE__*/React.createElement("button", {
+    "aria-label": "บันทึกห้องโปรด",
+    onClick: function onClick(e) {
+      e.stopPropagation();
+      onToggleFavorite(room.id);
+    },
+    style: {
+      position: "absolute",
+      top: 8,
+      right: 8,
+      width: 32,
+      height: 32,
+      borderRadius: "50%",
+      border: "none",
+      background: "rgba(255,255,255,0.9)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+      boxShadow: "0 2px 8px rgba(74,53,39,0.2)"
+    }
+  }, isFavorite ? /*#__PURE__*/React.createElement(Heart, {
+    size: 16
+  }) : /*#__PURE__*/React.createElement(HeartOutline, {
+    size: 16
+  }))), /*#__PURE__*/React.createElement("div", {
     className: "room-card-body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "room-card-top"
@@ -1332,7 +1440,9 @@ function SearchPage(_ref9) {
   var go = _ref9.go,
     rooms = _ref9.rooms,
     searchForm = _ref9.searchForm,
-    setSearchForm = _ref9.setSearchForm;
+    setSearchForm = _ref9.setSearchForm,
+    favorites = _ref9.favorites,
+    onToggleFavorite = _ref9.onToggleFavorite;
   var allRooms = rooms || INITIAL_ROOMS;
   var _useState3 = useState(3000),
     _useState4 = _slicedToArray(_useState3, 2),
@@ -1430,6 +1540,8 @@ function SearchPage(_ref9) {
     return /*#__PURE__*/React.createElement(RoomCard, {
       key: r.id,
       room: r,
+      isFavorite: !!(favorites && favorites.includes(r.id)),
+      onToggleFavorite: onToggleFavorite,
       onView: function onView() {
         return go("detail", r.id);
       }
@@ -1444,7 +1556,9 @@ function SearchPage(_ref9) {
 function DetailPage(_ref0) {
   var roomId = _ref0.roomId,
     rooms = _ref0.rooms,
-    go = _ref0.go;
+    go = _ref0.go,
+    favorites = _ref0.favorites,
+    onToggleFavorite = _ref0.onToggleFavorite;
   var allRooms = rooms || INITIAL_ROOMS;
   var room = allRooms.find(function (r) {
     return r.id === roomId;
@@ -1478,7 +1592,27 @@ function DetailPage(_ref0) {
     className: "detail-layout"
   }, /*#__PURE__*/React.createElement("div", {
     className: "detail-main"
-  }, /*#__PURE__*/React.createElement("h1", null, room.name), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("h1", {
+    style: {
+      margin: 0
+    }
+  }, room.name), onToggleFavorite && /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-outline small",
+    onClick: function onClick() {
+      return onToggleFavorite(room.id);
+    }
+  }, favorites && favorites.includes(room.id) ? /*#__PURE__*/React.createElement(Heart, {
+    size: 15
+  }) : /*#__PURE__*/React.createElement(HeartOutline, {
+    size: 15
+  }), " ", favorites && favorites.includes(room.id) ? "บันทึกแล้ว" : "ห้องโปรด")), /*#__PURE__*/React.createElement("div", {
     className: "room-meta",
     style: {
       marginBottom: 6
@@ -1887,12 +2021,24 @@ function ProfilePage(_ref12b) {
     bookings = _ref12b.bookings,
     updateProfile = _ref12b.updateProfile,
     onLogout = _ref12b.onLogout,
-    go = _ref12b.go;
-  var _useStatePr1 = useState({
-      name: user.name || "",
-      email: user.email || "",
-      phone: user.phone || ""
-    }),
+    go = _ref12b.go,
+    rooms = _ref12b.rooms,
+    favorites = _ref12b.favorites,
+    onToggleFavorite = _ref12b.onToggleFavorite,
+    promos = _ref12b.promos;
+  function fieldsFromUser(u) {
+    return {
+      name: u.name || "",
+      email: u.email || "",
+      phone: u.phone || "",
+      avatar: u.avatar || ""
+    };
+  }
+  var _useStatePr0 = useState(false),
+    _useStatePr0b = _slicedToArray(_useStatePr0, 2),
+    editing = _useStatePr0b[0],
+    setEditing = _useStatePr0b[1];
+  var _useStatePr1 = useState(fieldsFromUser(user)),
     _useStatePr2 = _slicedToArray(_useStatePr1, 2),
     form = _useStatePr2[0],
     setForm = _useStatePr2[1];
@@ -1906,61 +2052,132 @@ function ProfilePage(_ref12b) {
       style: {
         textAlign: "center"
       }
-    }, /*#__PURE__*/React.createElement("h2", null, "\u0E01\u0E23\u0E38\u0E13\u0E32\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A\u0E1A"), /*#__PURE__*/React.createElement("p", {
+    }, /*#__PURE__*/React.createElement("h2", null, "กรุณาเข้าสู่ระบบ"), /*#__PURE__*/React.createElement("p", {
       className: "muted"
-    }, "\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A\u0E1A\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E14\u0E39\u0E41\u0E25\u0E30\u0E41\u0E01\u0E49\u0E44\u0E02\u0E42\u0E1B\u0E23\u0E44\u0E1F\u0E25\u0E4C\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13"), /*#__PURE__*/React.createElement("button", {
+    }, "เข้าสู่ระบบเพื่อดูและแก้ไขโปรไฟล์ของคุณ"), /*#__PURE__*/React.createElement("button", {
       className: "btn btn-primary",
       onClick: function onClick() {
         return go("login");
       }
-    }, "\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A"));
+    }, "เข้าสู่ระบบ"));
   }
   var myBookings = bookings.filter(function (b) {
     return user.phone && b.phone === user.phone;
   });
+  var displayLabel = user.name;
+  var favoriteRooms = ((rooms || INITIAL_ROOMS)).filter(function (r) {
+    return favorites && favorites.includes(r.id);
+  });
+  var notifications = buildNotifications(bookings, promos);
+  function startEdit() {
+    setForm(fieldsFromUser(user));
+    setEditing(true);
+  }
+  function cancelEdit() {
+    setForm(fieldsFromUser(user));
+    setEditing(false);
+  }
+  function onAvatarChange(e) {
+    var file = e.target.files && e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      setForm(function (f) {
+        return _objectSpread(_objectSpread({}, f), {}, {
+          avatar: reader.result
+        });
+      });
+    };
+    reader.readAsDataURL(file);
+  }
   function submit(e) {
     e.preventDefault();
     updateProfile({
       name: form.name || "ผู้เข้าพัก",
       email: form.email,
-      phone: form.phone
+      phone: form.phone,
+      avatar: form.avatar
     });
+    setEditing(false);
     setSaved("บันทึกข้อมูลโปรไฟล์เรียบร้อยแล้ว");
     setTimeout(function () {
       return setSaved("");
     }, 2500);
   }
+  var avatarCircleStyle = {
+    width: 72,
+    height: 72,
+    borderRadius: "50%",
+    background: "var(--teal)",
+    color: "#fff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 28,
+    fontWeight: 700,
+    overflow: "hidden",
+    flexShrink: 0
+  };
+  var avatarNode = (editing ? form.avatar : user.avatar) ? /*#__PURE__*/React.createElement("img", {
+    src: editing ? form.avatar : user.avatar,
+    alt: "รูปโปรไฟล์",
+    style: {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover"
+    }
+  }) : (displayLabel || "?").trim().charAt(0).toUpperCase();
   return /*#__PURE__*/React.createElement("div", {
     className: "container section-pad narrow"
-  }, /*#__PURE__*/React.createElement("h1", null, "\u0E42\u0E1B\u0E23\u0E44\u0E1F\u0E25\u0E4C\u0E02\u0E2D\u0E07\u0E09\u0E31\u0E19"), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("h1", null, "โปรไฟล์ของฉัน"), /*#__PURE__*/React.createElement("div", {
     className: "auth-card"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      marginTop: 0
+    }
+  }, "ข้อมูลส่วนตัว"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "center",
-      gap: 12,
-      marginBottom: 16
+      gap: 14,
+      marginBottom: 18
     }
   }, /*#__PURE__*/React.createElement("div", {
+    style: avatarCircleStyle
+  }, avatarNode), editing && /*#__PURE__*/React.createElement("label", {
+    className: "btn btn-outline small",
     style: {
-      width: 56,
-      height: 56,
-      borderRadius: "50%",
-      background: "var(--teal)",
-      color: "#fff",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: 22,
-      fontWeight: 700
+      cursor: "pointer"
     }
-  }, (form.name || "?").trim().charAt(0).toUpperCase()), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("strong", null, user.name), /*#__PURE__*/React.createElement("div", {
+  }, "เปลี่ยนรูปโปรไฟล์", /*#__PURE__*/React.createElement("input", {
+    type: "file",
+    accept: "image/*",
+    onChange: onAvatarChange,
+    style: {
+      display: "none"
+    }
+  })), !editing && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("strong", null, displayLabel), /*#__PURE__*/React.createElement("div", {
     className: "muted small-note"
-  }, user.email || "ยังไม่ได้ระบุอีเมล"))), /*#__PURE__*/React.createElement("form", {
+  }, user.email || "ยังไม่ได้ระบุอีเมล"))), !editing ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("ul", {
+    className: "spec-list"
+  }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "ชื่อ-นามสกุล"), /*#__PURE__*/React.createElement("span", null, user.name || "-")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "อีเมล"), /*#__PURE__*/React.createElement("span", null, user.email || "-")), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "เบอร์โทรศัพท์"), /*#__PURE__*/React.createElement("span", null, user.phone || "-"))), saved && /*#__PURE__*/React.createElement("p", {
+    className: "small-note",
+    style: {
+      color: "var(--teal)",
+      fontWeight: 600
+    }
+  }, saved), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary",
+    style: {
+      width: "100%",
+      marginTop: 8
+    },
+    onClick: startEdit
+  }, "แก้ไขข้อมูล")) : /*#__PURE__*/React.createElement("form", {
     onSubmit: submit
   }, /*#__PURE__*/React.createElement("div", {
     className: "field"
-  }, /*#__PURE__*/React.createElement("label", null, "\u0E0A\u0E37\u0E48\u0E2D-\u0E19\u0E32\u0E21\u0E2A\u0E01\u0E38\u0E25"), /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("label", null, "ชื่อ-นามสกุล"), /*#__PURE__*/React.createElement("input", {
     value: form.name,
     onChange: function onChange(e) {
       return setForm(_objectSpread(_objectSpread({}, form), {}, {
@@ -1970,7 +2187,7 @@ function ProfilePage(_ref12b) {
     required: true
   })), /*#__PURE__*/React.createElement("div", {
     className: "field"
-  }, /*#__PURE__*/React.createElement("label", null, "\u0E2D\u0E35\u0E40\u0E21\u0E25"), /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("label", null, "อีเมล"), /*#__PURE__*/React.createElement("input", {
     type: "email",
     value: form.email,
     onChange: function onChange(e) {
@@ -1980,7 +2197,7 @@ function ProfilePage(_ref12b) {
     }
   })), /*#__PURE__*/React.createElement("div", {
     className: "field"
-  }, /*#__PURE__*/React.createElement("label", null, "\u0E40\u0E1A\u0E2D\u0E23\u0E4C\u0E42\u0E17\u0E23\u0E28\u0E31\u0E1E\u0E17\u0E4C"), /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("label", null, "เบอร์โทรศัพท์"), /*#__PURE__*/React.createElement("input", {
     type: "tel",
     value: form.phone,
     onChange: function onChange(e) {
@@ -1988,35 +2205,41 @@ function ProfilePage(_ref12b) {
         phone: e.target.value
       }));
     }
-  })), saved && /*#__PURE__*/React.createElement("p", {
-    className: "small-note",
+  })), /*#__PURE__*/React.createElement("div", {
     style: {
-      color: "var(--teal)",
-      fontWeight: 600
+      display: "flex",
+      gap: 10
     }
-  }, saved), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "btn btn-outline",
+    style: {
+      flex: 1
+    },
+    onClick: cancelEdit
+  }, "ยกเลิก"), /*#__PURE__*/React.createElement("button", {
     className: "btn btn-primary",
     style: {
-      width: "100%"
+      flex: 1
     },
     type: "submit"
-  }, "\u0E1A\u0E31\u0E19\u0E17\u0E36\u0E01\u0E01\u0E32\u0E23\u0E40\u0E1B\u0E25\u0E35\u0E48\u0E22\u0E19\u0E41\u0E1B\u0E25\u0E07"))), /*#__PURE__*/React.createElement("div", {
+  }, "บันทึกข้อมูล")))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
       margin: "24px 0 12px"
     }
-  }, /*#__PURE__*/React.createElement("h3", null, "\u0E2A\u0E23\u0E38\u0E1B\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07\u0E02\u0E2D\u0E07\u0E09\u0E31\u0E19"), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("h3", null, "สรุปการจองของฉัน"), /*#__PURE__*/React.createElement("button", {
     className: "nav-link",
     onClick: function onClick() {
       return go("mybookings");
     }
-  }, "\u0E14\u0E39\u0E17\u0E31\u0E49\u0E07\u0E2B\u0E21\u0E14")), form.phone ? /*#__PURE__*/React.createElement("p", {
+  }, "ดูทั้งหมด")), form.phone ? /*#__PURE__*/React.createElement("p", {
     className: "muted small-note"
-  }, "\u0E1E\u0E1A\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07\u0E17\u0E35\u0E48\u0E1C\u0E39\u0E01\u0E01\u0E31\u0E1A\u0E40\u0E1A\u0E2D\u0E23\u0E4C\u0E42\u0E17\u0E23\u0E28\u0E31\u0E1E\u0E17\u0E4C\u0E19\u0E35\u0E49 " + myBookings.length + " \u0E23\u0E32\u0E22\u0E01\u0E32\u0E23") : /*#__PURE__*/React.createElement("p", {
+  }, "พบการจองที่ผูกกับเบอร์โทรศัพท์นี้ " + myBookings.length + " รายการ") : /*#__PURE__*/React.createElement("p", {
     className: "muted small-note"
-  }, "\u0E01\u0E23\u0E2D\u0E01\u0E40\u0E1A\u0E2D\u0E23\u0E4C\u0E42\u0E17\u0E23\u0E28\u0E31\u0E1E\u0E17\u0E4C\u0E43\u0E2B\u0E49\u0E15\u0E23\u0E07\u0E01\u0E31\u0E1A\u0E15\u0E2D\u0E19\u0E08\u0E2D\u0E07\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E14\u0E39\u0E1B\u0E23\u0E30\u0E27\u0E31\u0E15\u0E34\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07\u0E17\u0E35\u0E48\u0E19\u0E35\u0E48"), /*#__PURE__*/React.createElement("button", {
+  }, "กรอกเบอร์โทรศัพท์ให้ตรงกับตอนจองเพื่อดูประวัติการจองที่นี่"), /*#__PURE__*/React.createElement("button", {
     className: "btn btn-outline small",
     style: {
       marginTop: 8
@@ -2024,7 +2247,121 @@ function ProfilePage(_ref12b) {
     onClick: onLogout
   }, /*#__PURE__*/React.createElement(LogOut, {
     size: 15
-  }), " \u0E2D\u0E2D\u0E01\u0E08\u0E32\u0E01\u0E23\u0E30\u0E1A\u0E1A"));
+  }), " ออกจากระบบ")), /*#__PURE__*/React.createElement("div", {
+    className: "auth-card",
+    style: {
+      marginTop: 20
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      marginTop: 0,
+      marginBottom: 0
+    }
+  }, "❤️ ห้องโปรด"), /*#__PURE__*/React.createElement("button", {
+    className: "nav-link",
+    onClick: function onClick() {
+      return go("search");
+    }
+  }, "ค้นหาห้องพักเพิ่ม")), favoriteRooms.length === 0 ? /*#__PURE__*/React.createElement("p", {
+    className: "muted small-note"
+  }, "ยังไม่มีห้องที่บันทึกไว้ กดรูปหัวใจที่การ์ดห้องพักเพื่อบันทึกเป็นห้องโปรด") : /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 12
+    }
+  }, favoriteRooms.map(function (r) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: r.id,
+      style: {
+        display: "flex",
+        gap: 12,
+        alignItems: "center",
+        border: "1px solid var(--line)",
+        borderRadius: 10,
+        padding: 10
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 84,
+        height: 64,
+        borderRadius: 8,
+        overflow: "hidden",
+        flexShrink: 0
+      }
+    }, /*#__PURE__*/React.createElement(RoomThumb, {
+      seed: INITIAL_ROOMS.findIndex(function (x) {
+        return x.id === r.id;
+      }),
+      image: r.images && r.images[0]
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        minWidth: 0
+      }
+    }, /*#__PURE__*/React.createElement("strong", null, r.name), /*#__PURE__*/React.createElement("div", {
+      className: "muted small-note"
+    }, /*#__PURE__*/React.createElement(Users, {
+      size: 13
+    }), " ", r.capacity, " \u0E04\u0E19 \u0E2B \u0E3F", money(r.price), " / \u0E04\u0E37\u0E19")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        gap: 6,
+        alignItems: "flex-end"
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "icon-btn",
+      "aria-label": "\u0E40\u0E2D\u0E32\u0E2D\u0E2D\u0E01\u0E08\u0E32\u0E01\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23\u0E42\u0E1B\u0E23\u0E14",
+      onClick: function onClick() {
+        return onToggleFavorite && onToggleFavorite(r.id);
+      }
+    }, /*#__PURE__*/React.createElement(Heart, {
+      size: 16
+    })), /*#__PURE__*/React.createElement("button", {
+      className: "btn btn-primary small",
+      onClick: function onClick() {
+        return go("booking", r.id);
+      }
+    }, "\u0E08\u0E2D\u0E07\u0E40\u0E25\u0E22")));
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "auth-card",
+    style: {
+      marginTop: 20
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      marginTop: 0
+    }
+  }, "🔔 การแจ้งเตือน"), notifications.length === 0 ? /*#__PURE__*/React.createElement("p", {
+    className: "muted small-note"
+  }, "ยังไม่มีการแจ้งเตือนใหม่") : /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 10
+    }
+  }, notifications.map(function (n) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: n.id,
+      style: {
+        display: "flex",
+        gap: 10,
+        alignItems: "flex-start",
+        background: "var(--paper-2)",
+        borderRadius: 8,
+        padding: "10px 12px",
+        fontSize: 14
+      }
+    }, /*#__PURE__*/React.createElement("span", null, n.icon), /*#__PURE__*/React.createElement("span", null, n.text));
+  })));
 }
 
 /* ------------------------------------------------------------------ */
@@ -2051,6 +2388,16 @@ function MyBookingsPage(_ref11) {
       }
     }, "\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A\u0E1A"));
   }
+  var groups = BOOKING_STATUS_ORDER.map(function (meta) {
+    return {
+      meta: meta,
+      items: bookings.filter(function (b) {
+        return b.status === meta.status;
+      })
+    };
+  }).filter(function (g) {
+    return g.items.length > 0;
+  });
   return /*#__PURE__*/React.createElement("div", {
     className: "container section-pad"
   }, /*#__PURE__*/React.createElement("h1", null, "\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07\u0E02\u0E2D\u0E07\u0E09\u0E31\u0E19"), bookings.length === 0 ? /*#__PURE__*/React.createElement("div", {
@@ -2060,31 +2407,52 @@ function MyBookingsPage(_ref11) {
     onClick: function onClick() {
       return go("search");
     }
-  }, "\u0E04\u0E49\u0E19\u0E2B\u0E32\u0E2B\u0E49\u0E2D\u0E07\u0E1E\u0E31\u0E01")) : /*#__PURE__*/React.createElement("div", {
-    className: "booking-list"
-  }, bookings.map(function (b) {
+  }, "\u0E04\u0E49\u0E19\u0E2B\u0E32\u0E2B\u0E49\u0E2D\u0E07\u0E1E\u0E31\u0E01")) : groups.map(function (g) {
     return /*#__PURE__*/React.createElement("div", {
-      key: b.code,
-      className: "booking-item"
-    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-      className: "booking-item-top"
-    }, /*#__PURE__*/React.createElement("strong", null, b.roomName), /*#__PURE__*/React.createElement("span", {
-      className: "badge ".concat(b.status === "ยืนยันแล้ว" ? "confirmed" : b.status === "ยกเลิกแล้ว" ? "cancelled" : "pending")
-    }, b.status)), /*#__PURE__*/React.createElement("div", {
-      className: "muted"
-    }, "\u0E23\u0E2B\u0E31\u0E2A\u0E08\u0E2D\u0E07 ", b.code, " \xB7 ", b.checkin, " \u2014 ", b.checkout, " (", b.nights, " \u0E04\u0E37\u0E19)"), /*#__PURE__*/React.createElement("div", {
-      className: "muted"
-    }, "\u0E1C\u0E39\u0E49\u0E15\u0E34\u0E14\u0E15\u0E48\u0E2D: ", b.phone)), /*#__PURE__*/React.createElement("div", {
-      className: "booking-item-right"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "price"
-    }, /*#__PURE__*/React.createElement("strong", null, "\u0E3F", money(b.total))), b.status !== "ยกเลิกแล้ว" && /*#__PURE__*/React.createElement("button", {
-      className: "btn btn-outline small",
-      onClick: function onClick() {
-        return cancelBooking(b.code);
+      key: g.meta.status,
+      style: {
+        marginBottom: 26
       }
-    }, "\u0E22\u0E01\u0E40\u0E25\u0E34\u0E01\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07")));
-  })));
+    }, /*#__PURE__*/React.createElement("h3", {
+      style: {
+        marginTop: 0,
+        marginBottom: 10
+      }
+    }, g.meta.emoji, " ", g.meta.label, " (", g.items.length, ")"), /*#__PURE__*/React.createElement("div", {
+      className: "booking-list"
+    }, g.items.map(function (b) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: b.code,
+        className: "booking-item"
+      }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+        className: "booking-item-top"
+      }, /*#__PURE__*/React.createElement("strong", null, b.roomName), /*#__PURE__*/React.createElement("span", {
+        className: "badge ".concat(g.meta.cls)
+      }, g.meta.emoji, " ", g.meta.label)), /*#__PURE__*/React.createElement("div", {
+        className: "muted"
+      }, "\u0E23\u0E2B\u0E31\u0E2A\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07 ", b.code), /*#__PURE__*/React.createElement("div", {
+        className: "muted"
+      }, b.checkin, " \u2014 ", b.checkout, " (", b.nights, " \u0E04\u0E37\u0E19)"), /*#__PURE__*/React.createElement("div", {
+        className: "muted"
+      }, /*#__PURE__*/React.createElement(Users, {
+        size: 13
+      }), " ", b.guests || 1, " \u0E1C\u0E39\u0E49\u0E40\u0E02\u0E49\u0E32\u0E1E\u0E31\u0E01")), /*#__PURE__*/React.createElement("div", {
+        className: "booking-item-right"
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "price"
+      }, /*#__PURE__*/React.createElement("strong", null, "\u0E3F", money(b.total))), /*#__PURE__*/React.createElement("button", {
+        className: "btn btn-outline small",
+        onClick: function onClick() {
+          return go("confirm", b.code);
+        }
+      }, "\u0E14\u0E39\u0E23\u0E32\u0E22\u0E25\u0E30\u0E40\u0E2D\u0E35\u0E22\u0E14"), b.status !== "ยกเลิกแล้ว" && /*#__PURE__*/React.createElement("button", {
+        className: "btn btn-outline small",
+        onClick: function onClick() {
+          return cancelBooking(b.code);
+        }
+      }, "\u0E22\u0E01\u0E40\u0E25\u0E34\u0E01\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07")));
+    })));
+  }));
 }
 
 /* ------------------------------------------------------------------ */
@@ -3126,6 +3494,27 @@ function App() {
     _useState44 = _slicedToArray(_useState43, 2),
     promos = _useState44[0],
     setPromos = _useState44[1];
+  var _useStateFav = useState(function () {
+      try {
+        var savedFav = localStorage.getItem("sk_favorites");
+        if (savedFav) return JSON.parse(savedFav);
+      } catch (e) {}
+      return [];
+    }),
+    _useStateFav2 = _slicedToArray(_useStateFav, 2),
+    favorites = _useStateFav2[0],
+    setFavorites = _useStateFav2[1];
+  function toggleFavorite(roomId) {
+    setFavorites(function (prev) {
+      var next = prev.includes(roomId) ? prev.filter(function (id) {
+        return id !== roomId;
+      }) : [roomId].concat(_toConsumableArray(prev));
+      try {
+        localStorage.setItem("sk_favorites", JSON.stringify(next));
+      } catch (e) {}
+      return next;
+    });
+  }
   function go(target, param) {
     if (target === "detail") setSelectedRoomId(param);
     if (target === "booking") setSelectedRoomId(param);
@@ -3242,16 +3631,22 @@ function App() {
     rooms: rooms,
     searchForm: searchForm,
     setSearchForm: setSearchForm,
-    doSearch: doSearch
+    doSearch: doSearch,
+    favorites: favorites,
+    onToggleFavorite: toggleFavorite
   }), page === "search" && /*#__PURE__*/React.createElement(SearchPage, {
     go: go,
     rooms: rooms,
     searchForm: searchForm,
-    setSearchForm: setSearchForm
+    setSearchForm: setSearchForm,
+    favorites: favorites,
+    onToggleFavorite: toggleFavorite
   }), page === "detail" && /*#__PURE__*/React.createElement(DetailPage, {
     roomId: selectedRoomId,
     rooms: rooms,
-    go: go
+    go: go,
+    favorites: favorites,
+    onToggleFavorite: toggleFavorite
   }), page === "booking" && /*#__PURE__*/React.createElement(BookingPage, {
     roomId: selectedRoomId,
     rooms: rooms,
@@ -3272,10 +3667,16 @@ function App() {
     cancelBooking: cancelBooking
   }), page === "profile" && /*#__PURE__*/React.createElement(ProfilePage, {
     user: user,
-    bookings: bookings,
+    bookings: user.phone ? bookings.filter(function (b) {
+      return b.phone === user.phone;
+    }) : bookings,
     updateProfile: updateProfile,
     onLogout: onLogout,
-    go: go
+    go: go,
+    rooms: rooms,
+    favorites: favorites,
+    onToggleFavorite: toggleFavorite,
+    promos: promos
   }), page === "map" && /*#__PURE__*/React.createElement(MapPage, null), page === "reviews" && /*#__PURE__*/React.createElement(ReviewsPage, {
     reviews: reviews,
     addReview: addReview
