@@ -774,6 +774,10 @@ function nightsBetween(inD, outD) {
 function genCode() {
   return "RM" + Math.random().toString(36).slice(2, 8).toUpperCase();
 }
+var ADMIN_CREDENTIALS = {
+  username: "admin",
+  password: "sangkhla2569"
+};
 var DEFAULT_UNITS_PER_ROOM_TYPE = 4;
 function datesOverlap(startA, endA, startB, endB) {
   if (!startA || !endA || !startB || !endB) return false;
@@ -983,6 +987,13 @@ function NavBar(_ref4) {
   }, user.loggedIn ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     className: "nav-link",
     onClick: function onClick() {
+      return go("profile");
+    }
+  }, /*#__PURE__*/React.createElement(User, {
+    size: 15
+  }), " ", user.name), /*#__PURE__*/React.createElement("button", {
+    className: "nav-link",
+    onClick: function onClick() {
       return go("mybookings");
     }
   }, "\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07\u0E02\u0E2D\u0E07\u0E09\u0E31\u0E19"), /*#__PURE__*/React.createElement("button", {
@@ -1026,6 +1037,12 @@ function NavBar(_ref4) {
       }
     }, l.label);
   }), user.loggedIn ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+    className: "nav-mobile-link",
+    onClick: function onClick() {
+      go("profile");
+      setOpen(false);
+    }
+  }, "\u0E42\u0E1B\u0E23\u0E44\u0E1F\u0E25\u0E4C\u0E02\u0E2D\u0E07\u0E09\u0E31\u0E19 (", user.name, ")"), /*#__PURE__*/React.createElement("button", {
     className: "nav-mobile-link",
     onClick: function onClick() {
       go("mybookings");
@@ -1102,10 +1119,11 @@ function Footer(_ref5) {
 
 function HomePage(_ref6) {
   var go = _ref6.go,
+    rooms = _ref6.rooms,
     searchForm = _ref6.searchForm,
     setSearchForm = _ref6.setSearchForm,
     doSearch = _ref6.doSearch;
-  var featured = INITIAL_ROOMS.slice(0, 3);
+  var featured = (rooms || INITIAL_ROOMS).slice(0, 3);
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("section", {
     className: "hero"
   }, /*#__PURE__*/React.createElement("div", {
@@ -1312,8 +1330,10 @@ function RoomCard(_ref8) {
 
 function SearchPage(_ref9) {
   var go = _ref9.go,
+    rooms = _ref9.rooms,
     searchForm = _ref9.searchForm,
     setSearchForm = _ref9.setSearchForm;
+  var allRooms = rooms || INITIAL_ROOMS;
   var _useState3 = useState(3000),
     _useState4 = _slicedToArray(_useState3, 2),
     priceMax = _useState4[0],
@@ -1326,14 +1346,14 @@ function SearchPage(_ref9) {
     _useState8 = _slicedToArray(_useState7, 2),
     type = _useState8[0],
     setType = _useState8[1];
-  var types = ["ทั้งหมด"].concat(_toConsumableArray(Array.from(new Set(INITIAL_ROOMS.map(function (r) {
+  var types = ["ทั้งหมด"].concat(_toConsumableArray(Array.from(new Set(allRooms.map(function (r) {
     return r.type;
   })))));
   var results = useMemo(function () {
-    return INITIAL_ROOMS.filter(function (r) {
+    return allRooms.filter(function (r) {
       return r.price <= priceMax && r.capacity >= guestsFilter && (type === "ทั้งหมด" || r.type === type);
     });
-  }, [priceMax, guestsFilter, type]);
+  }, [priceMax, guestsFilter, type, allRooms]);
   var nights = nightsBetween(searchForm.checkin, searchForm.checkout);
   return /*#__PURE__*/React.createElement("div", {
     className: "container section-pad"
@@ -1423,11 +1443,13 @@ function SearchPage(_ref9) {
 
 function DetailPage(_ref0) {
   var roomId = _ref0.roomId,
+    rooms = _ref0.rooms,
     go = _ref0.go;
-  var room = INITIAL_ROOMS.find(function (r) {
+  var allRooms = rooms || INITIAL_ROOMS;
+  var room = allRooms.find(function (r) {
     return r.id === roomId;
-  }) || INITIAL_ROOMS[0];
-  var idx = INITIAL_ROOMS.findIndex(function (r) {
+  }) || allRooms[0];
+  var idx = allRooms.findIndex(function (r) {
     return r.id === room.id;
   });
   return /*#__PURE__*/React.createElement("div", {
@@ -1546,13 +1568,15 @@ function DetailPage(_ref0) {
 
 function BookingPage(_ref1) {
   var roomId = _ref1.roomId,
+    rooms = _ref1.rooms,
     go = _ref1.go,
     searchForm = _ref1.searchForm,
     addBooking = _ref1.addBooking,
     bookings = _ref1.bookings;
-  var room = INITIAL_ROOMS.find(function (r) {
+  var allRooms = rooms || INITIAL_ROOMS;
+  var room = allRooms.find(function (r) {
     return r.id === roomId;
-  }) || INITIAL_ROOMS[0];
+  }) || allRooms[0];
   var _useState9 = useState({
       checkin: searchForm.checkin,
       checkout: searchForm.checkout,
@@ -1852,6 +1876,155 @@ function ConfirmPage(_ref10) {
       return go("home");
     }
   }, "\u0E01\u0E25\u0E31\u0E1A\u0E2B\u0E19\u0E49\u0E32\u0E41\u0E23\u0E01"))));
+}
+
+/* ------------------------------------------------------------------ */
+/*  PAGE: PROFILE                                                      */
+/* ------------------------------------------------------------------ */
+
+function ProfilePage(_ref12b) {
+  var user = _ref12b.user,
+    bookings = _ref12b.bookings,
+    updateProfile = _ref12b.updateProfile,
+    onLogout = _ref12b.onLogout,
+    go = _ref12b.go;
+  var _useStatePr1 = useState({
+      name: user.name || "",
+      email: user.email || "",
+      phone: user.phone || ""
+    }),
+    _useStatePr2 = _slicedToArray(_useStatePr1, 2),
+    form = _useStatePr2[0],
+    setForm = _useStatePr2[1];
+  var _useStatePr3 = useState(""),
+    _useStatePr4 = _slicedToArray(_useStatePr3, 2),
+    saved = _useStatePr4[0],
+    setSaved = _useStatePr4[1];
+  if (!user.loggedIn) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "container section-pad narrow",
+      style: {
+        textAlign: "center"
+      }
+    }, /*#__PURE__*/React.createElement("h2", null, "\u0E01\u0E23\u0E38\u0E13\u0E32\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A\u0E1A"), /*#__PURE__*/React.createElement("p", {
+      className: "muted"
+    }, "\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A\u0E1A\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E14\u0E39\u0E41\u0E25\u0E30\u0E41\u0E01\u0E49\u0E44\u0E02\u0E42\u0E1B\u0E23\u0E44\u0E1F\u0E25\u0E4C\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13"), /*#__PURE__*/React.createElement("button", {
+      className: "btn btn-primary",
+      onClick: function onClick() {
+        return go("login");
+      }
+    }, "\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A"));
+  }
+  var myBookings = bookings.filter(function (b) {
+    return user.phone && b.phone === user.phone;
+  });
+  function submit(e) {
+    e.preventDefault();
+    updateProfile({
+      name: form.name || "ผู้เข้าพัก",
+      email: form.email,
+      phone: form.phone
+    });
+    setSaved("บันทึกข้อมูลโปรไฟล์เรียบร้อยแล้ว");
+    setTimeout(function () {
+      return setSaved("");
+    }, 2500);
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    className: "container section-pad narrow"
+  }, /*#__PURE__*/React.createElement("h1", null, "\u0E42\u0E1B\u0E23\u0E44\u0E1F\u0E25\u0E4C\u0E02\u0E2D\u0E07\u0E09\u0E31\u0E19"), /*#__PURE__*/React.createElement("div", {
+    className: "auth-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 12,
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 56,
+      height: 56,
+      borderRadius: "50%",
+      background: "var(--teal)",
+      color: "#fff",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 22,
+      fontWeight: 700
+    }
+  }, (form.name || "?").trim().charAt(0).toUpperCase()), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("strong", null, user.name), /*#__PURE__*/React.createElement("div", {
+    className: "muted small-note"
+  }, user.email || "ยังไม่ได้ระบุอีเมล"))), /*#__PURE__*/React.createElement("form", {
+    onSubmit: submit
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/React.createElement("label", null, "\u0E0A\u0E37\u0E48\u0E2D-\u0E19\u0E32\u0E21\u0E2A\u0E01\u0E38\u0E25"), /*#__PURE__*/React.createElement("input", {
+    value: form.name,
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        name: e.target.value
+      }));
+    },
+    required: true
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/React.createElement("label", null, "\u0E2D\u0E35\u0E40\u0E21\u0E25"), /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    value: form.email,
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        email: e.target.value
+      }));
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/React.createElement("label", null, "\u0E40\u0E1A\u0E2D\u0E23\u0E4C\u0E42\u0E17\u0E23\u0E28\u0E31\u0E1E\u0E17\u0E4C"), /*#__PURE__*/React.createElement("input", {
+    type: "tel",
+    value: form.phone,
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        phone: e.target.value
+      }));
+    }
+  })), saved && /*#__PURE__*/React.createElement("p", {
+    className: "small-note",
+    style: {
+      color: "var(--teal)",
+      fontWeight: 600
+    }
+  }, saved), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary",
+    style: {
+      width: "100%"
+    },
+    type: "submit"
+  }, "\u0E1A\u0E31\u0E19\u0E17\u0E36\u0E01\u0E01\u0E32\u0E23\u0E40\u0E1B\u0E25\u0E35\u0E48\u0E22\u0E19\u0E41\u0E1B\u0E25\u0E07"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      margin: "24px 0 12px"
+    }
+  }, /*#__PURE__*/React.createElement("h3", null, "\u0E2A\u0E23\u0E38\u0E1B\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07\u0E02\u0E2D\u0E07\u0E09\u0E31\u0E19"), /*#__PURE__*/React.createElement("button", {
+    className: "nav-link",
+    onClick: function onClick() {
+      return go("mybookings");
+    }
+  }, "\u0E14\u0E39\u0E17\u0E31\u0E49\u0E07\u0E2B\u0E21\u0E14")), form.phone ? /*#__PURE__*/React.createElement("p", {
+    className: "muted small-note"
+  }, "\u0E1E\u0E1A\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07\u0E17\u0E35\u0E48\u0E1C\u0E39\u0E01\u0E01\u0E31\u0E1A\u0E40\u0E1A\u0E2D\u0E23\u0E4C\u0E42\u0E17\u0E23\u0E28\u0E31\u0E1E\u0E17\u0E4C\u0E19\u0E35\u0E49 " + myBookings.length + " \u0E23\u0E32\u0E22\u0E01\u0E32\u0E23") : /*#__PURE__*/React.createElement("p", {
+    className: "muted small-note"
+  }, "\u0E01\u0E23\u0E2D\u0E01\u0E40\u0E1A\u0E2D\u0E23\u0E4C\u0E42\u0E17\u0E23\u0E28\u0E31\u0E1E\u0E17\u0E4C\u0E43\u0E2B\u0E49\u0E15\u0E23\u0E07\u0E01\u0E31\u0E1A\u0E15\u0E2D\u0E19\u0E08\u0E2D\u0E07\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E14\u0E39\u0E1B\u0E23\u0E30\u0E27\u0E31\u0E15\u0E34\u0E01\u0E32\u0E23\u0E08\u0E2D\u0E07\u0E17\u0E35\u0E48\u0E19\u0E35\u0E48"), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-outline small",
+    style: {
+      marginTop: 8
+    },
+    onClick: onLogout
+  }, /*#__PURE__*/React.createElement(LogOut, {
+    size: 15
+  }), " \u0E2D\u0E2D\u0E01\u0E08\u0E32\u0E01\u0E23\u0E30\u0E1A\u0E1A"));
 }
 
 /* ------------------------------------------------------------------ */
@@ -2259,6 +2432,7 @@ function LoginPage(_ref13) {
   var _useState19 = useState({
       name: "",
       email: "",
+      phone: "",
       password: ""
     }),
     _useState20 = _slicedToArray(_useState19, 2),
@@ -2266,7 +2440,11 @@ function LoginPage(_ref13) {
     setForm = _useState20[1];
   function submit(e) {
     e.preventDefault();
-    onLogin(form.name || form.email.split("@")[0] || "ผู้เข้าพัก");
+    onLogin({
+      name: form.name || form.email.split("@")[0] || "ผู้เข้าพัก",
+      email: form.email,
+      phone: form.phone
+    });
     go("mybookings");
   }
   return /*#__PURE__*/React.createElement("div", {
@@ -2299,6 +2477,17 @@ function LoginPage(_ref13) {
     onChange: function onChange(e) {
       return setForm(_objectSpread(_objectSpread({}, form), {}, {
         name: e.target.value
+      }));
+    },
+    required: true
+  })), tab === "register" && /*#__PURE__*/React.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/React.createElement("label", null, "\u0E40\u0E1A\u0E2D\u0E23\u0E4C\u0E42\u0E17\u0E23\u0E28\u0E31\u0E1E\u0E17\u0E4C"), /*#__PURE__*/React.createElement("input", {
+    type: "tel",
+    value: form.phone,
+    onChange: function onChange(e) {
+      return setForm(_objectSpread(_objectSpread({}, form), {}, {
+        phone: e.target.value
       }));
     },
     required: true
@@ -2350,10 +2539,84 @@ function LoginPage(_ref13) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  PAGE: ADMIN LOGIN                                                  */
+/* ------------------------------------------------------------------ */
+
+function AdminLoginPage(_ref13b) {
+  var onLogin = _ref13b.onLogin,
+    go = _ref13b.go;
+  var _useStateAL1 = useState(""),
+    _useStateAL2 = _slicedToArray(_useStateAL1, 2),
+    username = _useStateAL2[0],
+    setUsername = _useStateAL2[1];
+  var _useStateAL3 = useState(""),
+    _useStateAL4 = _slicedToArray(_useStateAL3, 2),
+    password = _useStateAL4[0],
+    setPassword = _useStateAL4[1];
+  var _useStateAL5 = useState(""),
+    _useStateAL6 = _slicedToArray(_useStateAL5, 2),
+    error = _useStateAL6[0],
+    setError = _useStateAL6[1];
+  function submit(e) {
+    e.preventDefault();
+    var ok = onLogin(username, password);
+    if (!ok) {
+      setError("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+    } else {
+      setError("");
+    }
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    className: "container section-pad narrow"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "back-link",
+    onClick: function onClick() {
+      return go("home");
+    }
+  }, /*#__PURE__*/React.createElement(ChevronLeft, {
+    size: 16
+  }), " \u0E01\u0E25\u0E31\u0E1A\u0E2B\u0E19\u0E49\u0E32\u0E41\u0E23\u0E01"), /*#__PURE__*/React.createElement("h1", null, "\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A\u0E1A\u0E2B\u0E25\u0E31\u0E07\u0E1A\u0E49\u0E32\u0E19"), /*#__PURE__*/React.createElement("p", {
+    className: "muted"
+  }, "\u0E2A\u0E33\u0E2B\u0E23\u0E31\u0E1A\u0E1C\u0E39\u0E49\u0E14\u0E39\u0E41\u0E25\u0E23\u0E30\u0E1A\u0E1A\u0E40\u0E17\u0E48\u0E32\u0E19\u0E31\u0E49\u0E19"), /*#__PURE__*/React.createElement("div", {
+    className: "auth-card"
+  }, /*#__PURE__*/React.createElement("form", {
+    onSubmit: submit
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/React.createElement("label", null, "\u0E0A\u0E37\u0E48\u0E2D\u0E1C\u0E39\u0E49\u0E43\u0E0A\u0E49"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: username,
+    autoFocus: true,
+    onChange: function onChange(e) {
+      return setUsername(e.target.value);
+    },
+    required: true
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/React.createElement("label", null, "\u0E23\u0E2B\u0E31\u0E2A\u0E1C\u0E48\u0E32\u0E19"), /*#__PURE__*/React.createElement("input", {
+    type: "password",
+    value: password,
+    onChange: function onChange(e) {
+      return setPassword(e.target.value);
+    },
+    required: true
+  })), error && /*#__PURE__*/React.createElement("p", {
+    className: "form-error"
+  }, error), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary",
+    style: {
+      width: "100%"
+    },
+    type: "submit"
+  }, "\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E23\u0E30\u0E1A\u0E1A"))));
+}
+
+/* ------------------------------------------------------------------ */
 /*  PAGE: ADMIN                                                        */
 /* ------------------------------------------------------------------ */
 
 function AdminPage(_ref14) {
+  var onLogout = _ref14.onLogout;
   var rooms = _ref14.rooms,
     setRooms = _ref14.setRooms,
     bookings = _ref14.bookings,
@@ -2386,6 +2649,23 @@ function AdminPage(_ref14) {
   var pendingCount = bookings.filter(function (b) {
     return b.status === "รอการยืนยันจากที่พัก";
   }).length;
+  function updateRoom(id, patch) {
+    setRooms(rooms.map(function (r) {
+      return r.id === id ? _objectSpread(_objectSpread({}, r), patch) : r;
+    }));
+  }
+  function updateRoomTypeUnits(roomId, typeIndex, units) {
+    setRooms(rooms.map(function (r) {
+      if (r.id !== roomId) return r;
+      return _objectSpread(_objectSpread({}, r), {}, {
+        roomTypes: r.roomTypes.map(function (rt, i) {
+          return i === typeIndex ? _objectSpread(_objectSpread({}, rt), {}, {
+            totalUnits: units
+          }) : rt;
+        })
+      });
+    }));
+  }
   function addRoom(e) {
     e.preventDefault();
     if (!newRoom.name || !newRoom.price) return;
@@ -2452,7 +2732,13 @@ function AdminPage(_ref14) {
     className: "admin-header"
   }, /*#__PURE__*/React.createElement(ShieldCheck, {
     size: 22
-  }), /*#__PURE__*/React.createElement("h1", null, "\u0E41\u0E1C\u0E07\u0E04\u0E27\u0E1A\u0E04\u0E38\u0E21\u0E41\u0E2D\u0E14\u0E21\u0E34\u0E19")), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement("h1", null, "\u0E41\u0E1C\u0E07\u0E04\u0E27\u0E1A\u0E04\u0E38\u0E21\u0E41\u0E2D\u0E14\u0E21\u0E34\u0E19"), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-outline small",
+    style: {
+      marginLeft: "auto"
+    },
+    onClick: onLogout
+  }, "\u0E2D\u0E2D\u0E01\u0E08\u0E32\u0E01\u0E23\u0E30\u0E1A\u0E1A")), /*#__PURE__*/React.createElement("div", {
     className: "admin-tabs"
   }, tabs.map(function (t) {
     var Icon = t.icon;
@@ -2488,7 +2774,65 @@ function AdminPage(_ref14) {
   }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "\u0E0A\u0E37\u0E48\u0E2D\u0E2B\u0E49\u0E2D\u0E07"), /*#__PURE__*/React.createElement("th", null, "\u0E1B\u0E23\u0E30\u0E40\u0E20\u0E17"), /*#__PURE__*/React.createElement("th", null, "\u0E23\u0E32\u0E04\u0E32/\u0E04\u0E37\u0E19"), /*#__PURE__*/React.createElement("th", null, "\u0E23\u0E31\u0E1A\u0E44\u0E14\u0E49 (\u0E04\u0E19)"), /*#__PURE__*/React.createElement("th", null))), /*#__PURE__*/React.createElement("tbody", null, rooms.map(function (r) {
     return /*#__PURE__*/React.createElement("tr", {
       key: r.id
-    }, /*#__PURE__*/React.createElement("td", null, r.name), /*#__PURE__*/React.createElement("td", null, r.type), /*#__PURE__*/React.createElement("td", null, "\u0E3F", money(r.price)), /*#__PURE__*/React.createElement("td", null, r.capacity), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("button", {
+    }, /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("input", {
+      value: r.name,
+      style: {
+        width: "100%",
+        border: "none",
+        background: "transparent",
+        fontFamily: "inherit",
+        fontSize: "inherit"
+      },
+      onChange: function onChange(e) {
+        return updateRoom(r.id, {
+          name: e.target.value
+        });
+      }
+    })), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("input", {
+      value: r.type,
+      style: {
+        width: "100%",
+        border: "none",
+        background: "transparent",
+        fontFamily: "inherit",
+        fontSize: "inherit"
+      },
+      onChange: function onChange(e) {
+        return updateRoom(r.id, {
+          type: e.target.value
+        });
+      }
+    })), /*#__PURE__*/React.createElement("td", null, "\u0E3F", /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      value: r.price,
+      style: {
+        width: "80px",
+        border: "none",
+        background: "transparent",
+        fontFamily: "inherit",
+        fontSize: "inherit"
+      },
+      onChange: function onChange(e) {
+        return updateRoom(r.id, {
+          price: Number(e.target.value)
+        });
+      }
+    })), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      value: r.capacity,
+      style: {
+        width: "60px",
+        border: "none",
+        background: "transparent",
+        fontFamily: "inherit",
+        fontSize: "inherit"
+      },
+      onChange: function onChange(e) {
+        return updateRoom(r.id, {
+          capacity: Number(e.target.value)
+        });
+      }
+    })), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("button", {
       className: "icon-btn",
       onClick: function onClick() {
         return setRooms(rooms.filter(function (x) {
@@ -2498,7 +2842,64 @@ function AdminPage(_ref14) {
     }, /*#__PURE__*/React.createElement(Trash2, {
       size: 16
     }))));
-  }))), /*#__PURE__*/React.createElement("h3", {
+  }))), /*#__PURE__*/React.createElement("p", {
+    className: "muted small-note",
+    style: {
+      marginTop: 8
+    }
+  }, "\u0E41\u0E01\u0E49\u0E44\u0E02\u0E44\u0E14\u0E49\u0E42\u0E14\u0E22\u0E1E\u0E34\u0E21\u0E1E\u0E4C\u0E17\u0E31\u0E1A\u0E43\u0E19\u0E0A\u0E48\u0E2D\u0E07\u0E42\u0E14\u0E22\u0E15\u0E23\u0E07"), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      marginTop: 24
+    }
+  }, "\u0E08\u0E33\u0E19\u0E27\u0E19\u0E2B\u0E49\u0E2D\u0E07\u0E27\u0E48\u0E32\u0E07\u0E15\u0E48\u0E2D\u0E1B\u0E23\u0E30\u0E40\u0E20\u0E17 (\u0E43\u0E0A\u0E49\u0E15\u0E23\u0E27\u0E08\u0E2A\u0E2D\u0E1A\u0E15\u0E2D\u0E19\u0E08\u0E2D\u0E07)"), /*#__PURE__*/React.createElement("p", {
+    className: "muted small-note"
+  }, "\u0E01\u0E33\u0E2B\u0E19\u0E14\u0E08\u0E33\u0E19\u0E27\u0E19\u0E2B\u0E49\u0E2D\u0E07\u0E08\u0E23\u0E34\u0E07\u0E43\u0E19\u0E41\u0E15\u0E48\u0E25\u0E30\u0E1B\u0E23\u0E30\u0E40\u0E20\u0E17 \u0E23\u0E30\u0E1A\u0E1A\u0E08\u0E30\u0E43\u0E0A\u0E49\u0E15\u0E31\u0E27\u0E40\u0E25\u0E02\u0E19\u0E35\u0E49\u0E40\u0E1B\u0E23\u0E35\u0E22\u0E1A\u0E40\u0E17\u0E35\u0E22\u0E1A\u0E01\u0E31\u0E1A\u0E08\u0E33\u0E19\u0E27\u0E19\u0E17\u0E35\u0E48\u0E08\u0E2D\u0E07\u0E44\u0E1B\u0E41\u0E25\u0E49\u0E27\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E40\u0E1B\u0E34\u0E14/\u0E1B\u0E34\u0E14\u0E23\u0E31\u0E1A\u0E08\u0E2D\u0E07 (\u0E04\u0E48\u0E32\u0E40\u0E23\u0E34\u0E48\u0E21\u0E15\u0E49\u0E19 " + DEFAULT_UNITS_PER_ROOM_TYPE + " \u0E2B\u0E49\u0E2D\u0E07/\u0E1B\u0E23\u0E30\u0E40\u0E20\u0E17\u0E16\u0E49\u0E32\u0E22\u0E31\u0E07\u0E44\u0E21\u0E48\u0E44\u0E14\u0E49\u0E01\u0E33\u0E2B\u0E19\u0E14)"), rooms.filter(function (r) {
+    return r.roomTypes && r.roomTypes.length > 0;
+  }).map(function (r) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: r.id,
+      className: "room-type-item",
+      style: {
+        flexDirection: "column",
+        alignItems: "stretch",
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "room-type-name"
+    }, r.name), r.roomTypes.map(function (rt, i) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: rt.name + i,
+        style: {
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 10,
+          padding: "6px 0",
+          borderTop: "1px dashed var(--line)"
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        className: "small-note"
+      }, rt.name), /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 6
+        }
+      }, /*#__PURE__*/React.createElement("input", {
+        type: "number",
+        min: 0,
+        value: rt.totalUnits || DEFAULT_UNITS_PER_ROOM_TYPE,
+        style: {
+          width: "60px"
+        },
+        onChange: function onChange(e) {
+          return updateRoomTypeUnits(r.id, i, Number(e.target.value));
+        }
+      }), /*#__PURE__*/React.createElement("span", {
+        className: "small-note muted"
+      }, "\u0E2B\u0E49\u0E2D\u0E07")));
+    }));
+  }), /*#__PURE__*/React.createElement("h3", {
     style: {
       marginTop: 24
     }
@@ -2684,9 +3085,17 @@ function App() {
     _useState34 = _slicedToArray(_useState33, 2),
     searchForm = _useState34[0],
     setSearchForm = _useState34[1];
-  var _useState35 = useState({
-      loggedIn: false,
-      name: ""
+  var _useState35 = useState(function () {
+      try {
+        var saved = localStorage.getItem("sk_user");
+        if (saved) return JSON.parse(saved);
+      } catch (e) {}
+      return {
+        loggedIn: false,
+        name: "",
+        email: "",
+        phone: ""
+      };
     }),
     _useState36 = _slicedToArray(_useState35, 2),
     user = _useState36[0],
@@ -2695,6 +3104,16 @@ function App() {
     _useState38 = _slicedToArray(_useState37, 2),
     rooms = _useState38[0],
     setRooms = _useState38[1];
+  var _useStateAdmin = useState(function () {
+      try {
+        return localStorage.getItem("sk_admin_auth") === "1";
+      } catch (e) {
+        return false;
+      }
+    }),
+    _useStateAdmin2 = _slicedToArray(_useStateAdmin, 2),
+    adminLoggedIn = _useStateAdmin2[0],
+    setAdminLoggedIn = _useStateAdmin2[1];
   var _useState39 = useState([]),
     _useState40 = _slicedToArray(_useState39, 2),
     bookings = _useState40[0],
@@ -2729,7 +3148,7 @@ function App() {
         return prev;
       }
       // ตรวจสอบห้องว่างจริงอีกครั้งก่อนบันทึก ป้องกันการจองซ้อนเกินจำนวนห้องที่มี
-      var room = INITIAL_ROOMS.find(function (r) {
+      var room = rooms.find(function (r) {
         return r.id === b.roomId;
       });
       if (room) {
@@ -2759,17 +3178,57 @@ function App() {
       return [r].concat(_toConsumableArray(prev));
     });
   }
-  function onLogin(name) {
-    setUser({
+  function onLogin(profile) {
+    var next = {
       loggedIn: true,
-      name: name
-    });
+      name: profile.name || "ผู้เข้าพัก",
+      email: profile.email || "",
+      phone: profile.phone || ""
+    };
+    setUser(next);
+    try {
+      localStorage.setItem("sk_user", JSON.stringify(next));
+    } catch (e) {}
   }
   function onLogout() {
-    setUser({
+    var next = {
       loggedIn: false,
-      name: ""
+      name: "",
+      email: "",
+      phone: ""
+    };
+    setUser(next);
+    try {
+      localStorage.removeItem("sk_user");
+    } catch (e) {}
+    go("home");
+  }
+  function updateProfile(patch) {
+    setUser(function (prev) {
+      var next = _objectSpread(_objectSpread({}, prev), patch);
+      try {
+        localStorage.setItem("sk_user", JSON.stringify(next));
+      } catch (e) {}
+      return next;
     });
+  }
+  function adminLogin(username, password) {
+    var ok = username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password;
+    if (ok) {
+      setAdminLoggedIn(true);
+      try {
+        localStorage.setItem("sk_admin_auth", "1");
+      } catch (e) {}
+      go("admin");
+    }
+    return ok;
+  }
+  function adminLogout() {
+    setAdminLoggedIn(false);
+    try {
+      localStorage.removeItem("sk_admin_auth");
+    } catch (e) {}
+    go("home");
   }
   return /*#__PURE__*/React.createElement("div", {
     className: "app-root"
@@ -2780,18 +3239,22 @@ function App() {
     onLogout: onLogout
   }), page === "home" && /*#__PURE__*/React.createElement(HomePage, {
     go: go,
+    rooms: rooms,
     searchForm: searchForm,
     setSearchForm: setSearchForm,
     doSearch: doSearch
   }), page === "search" && /*#__PURE__*/React.createElement(SearchPage, {
     go: go,
+    rooms: rooms,
     searchForm: searchForm,
     setSearchForm: setSearchForm
   }), page === "detail" && /*#__PURE__*/React.createElement(DetailPage, {
     roomId: selectedRoomId,
+    rooms: rooms,
     go: go
   }), page === "booking" && /*#__PURE__*/React.createElement(BookingPage, {
     roomId: selectedRoomId,
+    rooms: rooms,
     go: go,
     searchForm: searchForm,
     addBooking: addBooking,
@@ -2802,16 +3265,24 @@ function App() {
     go: go
   }), page === "mybookings" && /*#__PURE__*/React.createElement(MyBookingsPage, {
     user: user,
-    bookings: bookings,
+    bookings: user.phone ? bookings.filter(function (b) {
+      return b.phone === user.phone;
+    }) : bookings,
     go: go,
     cancelBooking: cancelBooking
+  }), page === "profile" && /*#__PURE__*/React.createElement(ProfilePage, {
+    user: user,
+    bookings: bookings,
+    updateProfile: updateProfile,
+    onLogout: onLogout,
+    go: go
   }), page === "map" && /*#__PURE__*/React.createElement(MapPage, null), page === "reviews" && /*#__PURE__*/React.createElement(ReviewsPage, {
     reviews: reviews,
     addReview: addReview
   }), page === "about" && /*#__PURE__*/React.createElement(AboutPage, null), page === "login" && /*#__PURE__*/React.createElement(LoginPage, {
     onLogin: onLogin,
     go: go
-  }), page === "admin" && /*#__PURE__*/React.createElement(AdminPage, {
+  }), page === "admin" && (adminLoggedIn ? /*#__PURE__*/React.createElement(AdminPage, {
     rooms: rooms,
     setRooms: setRooms,
     bookings: bookings,
@@ -2819,8 +3290,12 @@ function App() {
     reviews: reviews,
     setReviews: setReviews,
     promos: promos,
-    setPromos: setPromos
-  }), /*#__PURE__*/React.createElement("div", {
+    setPromos: setPromos,
+    onLogout: adminLogout
+  }) : /*#__PURE__*/React.createElement(AdminLoginPage, {
+    onLogin: adminLogin,
+    go: go
+  })), /*#__PURE__*/React.createElement("div", {
     className: "admin-entry-wrap container"
   }, /*#__PURE__*/React.createElement("button", {
     className: "admin-entry",
