@@ -1031,6 +1031,9 @@ function NavBar(_ref4) {
   }, {
     id: "about",
     label: "เกี่ยวกับเรา"
+  }, {
+    id: "profile",
+    label: "โปรไฟล์"
   }];
   return /*#__PURE__*/React.createElement("header", {
     className: "nav"
@@ -1057,14 +1060,17 @@ function NavBar(_ref4) {
     }, l.label);
   })), /*#__PURE__*/React.createElement("div", {
     className: "nav-actions desktop-only"
-  }, user.loggedIn ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
-    className: "nav-link",
-    onClick: function onClick() {
-      return go("profile");
+  }, user.loggedIn ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
+    className: "muted small-note",
+    style: {
+      marginRight: 2,
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 4
     }
   }, /*#__PURE__*/React.createElement(User, {
     size: 15
-  }), " ", user.name), /*#__PURE__*/React.createElement("button", {
+  }), user.name), /*#__PURE__*/React.createElement("button", {
     className: "nav-link",
     onClick: function onClick() {
       return go("mybookings");
@@ -1110,12 +1116,6 @@ function NavBar(_ref4) {
       }
     }, l.label);
   }), user.loggedIn ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
-    className: "nav-mobile-link",
-    onClick: function onClick() {
-      go("profile");
-      setOpen(false);
-    }
-  }, "\u0E42\u0E1B\u0E23\u0E44\u0E1F\u0E25\u0E4C\u0E02\u0E2D\u0E07\u0E09\u0E31\u0E19 (", user.name, ")"), /*#__PURE__*/React.createElement("button", {
     className: "nav-mobile-link",
     onClick: function onClick() {
       go("mybookings");
