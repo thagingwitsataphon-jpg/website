@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ซาลอน เจริญผล — จองคิวทำผมผู้หญิง</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Taviraj:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3B2A2E;
+    --ink-2:#5C4147;
+    --cream:#FBF3EC;
+    --paper:#FFFFFF;
+    --paper-2:#FBEFE9;
+    --brass:#D9A441;
+    --brass-dark:#B9832B;
+    --rust:#C4707B;
+    --sage:#A97C67;
+    --line: rgba(196,112,123,0.3);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans Thai', sans-serif; line-height:1.6;}
+  h1,h2,h3,.display{font-family:'Taviraj', serif; font-weight:600; margin:0;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+  :focus-visible{outline:2px solid var(--brass); outline-offset:2px;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 24px;}
+  .page{display:none;}
+  .page.active{display:block;}
+
+  /* ---------- NAV ---------- */
+  .nav{position:sticky; top:0; z-index:40; background:rgba(59,42,46,0.97); color:var(--cream); border-bottom:1px solid rgba(217,164,65,0.25);}
+  .nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:14px 24px;}
+  .nav .brand{font-family:'Taviraj',serif; font-size:20px; font-weight:600; cursor:pointer;}
+  .nav .brand span{color:var(--brass);}
+  .nav-links{display:flex; gap:22px; list-style:none; margin:0; padding:0;}
+  .nav-links a{font-size:14.5px; text-decoration:none; color:var(--cream); opacity:0.8; padding:4px 0; border-bottom:1px solid transparent; cursor:pointer;}
+  .nav-links a:hover{opacity:1;}
+  .nav-links a.active{opacity:1; border-color:var(--brass); color:var(--brass);}
+  .nav-cta{font-size:13.5px; background:var(--brass); color:var(--ink); padding:8px 16px; border-radius:2px; cursor:pointer; border:none; font-weight:500;}
+  .nav-right{display:flex; align-items:center; gap:16px;}
+  .nav-auth a{font-size:14px; color:var(--cream); opacity:0.85; text-decoration:none; cursor:pointer;}
+  .nav-auth a:hover{opacity:1;}
+  @media (max-width:760px){ .nav-links{display:none;} }
+
+  section{padding:60px 0;}
+  .section-head{margin-bottom:32px; max-width:580px;}
+  .eyebrow{font-size:13.5px; color:var(--rust); margin-bottom:10px; letter-spacing:0.2px;}
+  .section-head h2{font-size:30px;}
+  .section-head p{color:#6B5854; margin-top:10px; font-size:15px;}
+
+  .btn{display:inline-block; padding:13px 26px; border-radius:2px; font-size:15px; text-decoration:none; cursor:pointer; border:1px solid transparent; font-weight:500;}
+  .btn-primary{background:var(--brass); color:var(--ink);}
+  .btn-primary:hover{background:#4A94E0;}
+  .btn-ghost{background:transparent; border-color:rgba(234,243,255,0.4); color:var(--cream);}
+  .btn-ghost:hover{border-color:var(--cream);}
+  .btn-dark{background:var(--ink); color:var(--cream); border-color:var(--ink);}
+  .btn-outline{background:transparent; border-color:#E3CBB8; color:var(--ink);}
+  .btn-outline:hover{border-color:var(--rust); color:var(--rust);}
+  .btn:disabled{opacity:0.4; cursor:not-allowed;}
+
+  /* ---------- HOME HERO ---------- */
+  .hero{background:var(--ink); color:var(--cream); padding:64px 0 56px;}
+  .hero .wrap{display:grid; grid-template-columns:1.3fr 0.9fr; gap:40px; align-items:end;}
+  .hero h1{font-size:48px; line-height:1.1; max-width:520px;}
+  .hero p.tag{max-width:440px; margin-top:16px; font-size:16px; color:rgba(234,243,255,0.82);}
+  .hero .cta-row{margin-top:26px; display:flex; gap:14px; flex-wrap:wrap;}
+  .hero-hours{font-size:14px; color:rgba(234,243,255,0.62); margin-top:20px;}
+  .hero-card{background:var(--paper); color:var(--ink); border-radius:4px; padding:24px; box-shadow:0 18px 40px rgba(0,0,0,0.3);}
+  .hero-card .label{font-size:12.5px; color:var(--brass-dark);}
+  .hero-card h3{font-size:22px; margin-top:6px;}
+  .hero-card .row{display:flex; justify-content:space-between; font-size:13.5px; margin-top:14px; border-top:1px dashed var(--line); padding-top:12px;}
+  @media (max-width:760px){ .hero .wrap{grid-template-columns:1fr;} .hero h1{font-size:36px;} }
+
+  /* ---------- PROMOS ---------- */
+  .promo-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .promo-card{background:var(--paper-2); border:1px dashed var(--brass); border-radius:4px; padding:22px;}
+  .promo-card .tag-num{font-family:'Taviraj',serif; font-size:14px; color:var(--rust); margin-bottom:8px;}
+  .promo-card h3{font-size:18px;}
+  .promo-card p{font-size:13.5px; color:#6B5854; margin-top:8px;}
+  @media (max-width:800px){ .promo-grid{grid-template-columns:1fr;} }
+
+  /* ---------- FEATURED SERVICES (home) ---------- */
+  .feat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .feat-card{background:var(--paper); border:1px solid var(--line); border-radius:4px; padding:22px; cursor:pointer; transition:border-color .15s;}
+  .feat-card:hover{border-color:var(--rust);}
+  .feat-card .fname{font-size:17px; font-weight:500;}
+  .feat-card .fmeta{display:flex; justify-content:space-between; margin-top:10px; font-size:13.5px; color:#8A7368;}
+  .feat-card .fprice{color:var(--rust); font-family:'Taviraj',serif; font-weight:600; font-size:16px;}
+  @media (max-width:800px){ .feat-grid{grid-template-columns:1fr;} }
+
+  /* ---------- FEATURED BARBER (home) ---------- */
+  .feat-barber{background:var(--ink); color:var(--cream); border-radius:6px; padding:36px; display:flex; gap:28px; align-items:center;}
+  .feat-barber .avatar-lg{width:88px; height:88px; min-width:88px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Taviraj',serif; font-size:28px; font-weight:600; color:var(--ink);}
+  .feat-barber h3{font-size:24px; color:var(--cream);}
+  .feat-barber .role{font-size:13px; color:var(--brass); margin:4px 0 8px;}
+  .feat-barber p.spec{font-size:14.5px; color:rgba(234,243,255,0.8); margin-bottom:10px;}
+  @media (max-width:700px){ .feat-barber{flex-direction:column; text-align:center;} }
+
+  /* ---------- STARS ---------- */
+  .stars{color:var(--brass); font-size:14px; letter-spacing:1px;}
+  .stars .muted{color:#E9D9CC;}
+  .rating-line{font-size:13px; color:#8A7368; margin-top:2px;}
+
+  /* ---------- SERVICES PAGE ---------- */
+  .service-list{border-top:1px solid var(--line);}
+  .service-row{display:flex; align-items:center; gap:16px; padding:18px 0; border-bottom:1px solid var(--line);}
+  .service-row .sname{flex:1; min-width:0;}
+  .service-row .sname .n{font-size:17px;}
+  .service-row .sname .d{font-size:13px; color:#8A7368; margin-top:2px;}
+  .service-row .sprice{font-family:'Taviraj',serif; font-weight:600; font-size:17px; color:var(--rust); white-space:nowrap;}
+  @media (max-width:600px){ .service-row{flex-wrap:wrap;} }
+
+  /* ---------- BARBERS PAGE ---------- */
+  .barbers-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .barber-card{background:var(--paper-2); border:1px solid var(--line); border-radius:4px; padding:24px; display:flex; flex-direction:column;}
+  .avatar{width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--cream); font-family:'Taviraj',serif; font-weight:600; font-size:18px; margin-bottom:16px;}
+  .barber-card h3{font-size:19px;}
+  .barber-card .role{font-size:13px; color:var(--rust); margin:4px 0 10px;}
+  .barber-card .spec{font-size:14px; color:#4A3A3D; margin-bottom:6px;}
+  .barber-card .exp{font-size:13px; color:#8A7368; margin-bottom:10px;}
+  .barber-card .btn{margin-top:auto; text-align:center;}
+  @media (max-width:800px){ .barbers-grid{grid-template-columns:1fr;} }
+
+  /* ---------- BOOKING PAGE ---------- */
+  .booking-shell{background:var(--ink); color:var(--cream); border-radius:6px; padding:40px; display:grid; grid-template-columns:1fr 320px; gap:36px;}
+  .field-label{font-size:13.5px; color:var(--brass); margin:22px 0 10px; display:block;}
+  .field-label:first-of-type{margin-top:0;}
+  .choice-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
+  .choice-card{display:flex; justify-content:space-between; align-items:center; gap:10px; background:rgba(234,243,255,0.05); border:1px solid rgba(234,243,255,0.18); border-radius:4px; padding:12px 14px; cursor:pointer; font-size:14px;}
+  .choice-card:hover{border-color:var(--brass);}
+  .choice-card.selected{border-color:var(--brass); background:rgba(47,128,214,0.14);}
+  .choice-card .cc-title{font-weight:500;}
+  .choice-card .cc-sub{font-size:12px; color:rgba(234,243,255,0.6); margin-top:2px;}
+  .choice-card .cc-right{font-size:12.5px; color:var(--brass); white-space:nowrap;}
+  @media (max-width:500px){ .choice-grid{grid-template-columns:1fr;} }
+
+  input[type=text], input[type=tel], input[type=date], input[type=password], textarea{
+    width:100%; padding:12px 14px; background:rgba(234,243,255,0.06); border:1px solid rgba(234,243,255,0.25);
+    border-radius:4px; color:var(--cream); font-size:15px; font-family:inherit;
+  }
+  input::placeholder, textarea::placeholder{color:rgba(234,243,255,0.4);}
+  textarea{resize:vertical; min-height:70px;}
+  input[type=date]{color-scheme:dark;}
+  .closed-note{font-size:13px; color:#D9534F; margin-top:8px;}
+
+  .slot-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
+  .slot-btn{padding:10px 4px; text-align:center; font-size:13.5px; background:rgba(234,243,255,0.05); border:1px solid rgba(234,243,255,0.2); border-radius:3px; color:var(--cream); cursor:pointer;}
+  .slot-btn:hover:not(:disabled){border-color:var(--brass);}
+  .slot-btn.selected{background:var(--brass); color:var(--ink); border-color:var(--brass); font-weight:600;}
+  .slot-btn:disabled{opacity:0.3; cursor:not-allowed; text-decoration:line-through;}
+  .slot-empty{font-size:13.5px; color:rgba(234,243,255,0.5);}
+  @media (max-width:500px){ .slot-grid{grid-template-columns:repeat(3,1fr);} }
+
+  .booking-actions{margin-top:26px;}
+  .form-error{font-size:13px; color:#D9534F; margin-top:14px; display:none;}
+  .form-error.show{display:block;}
+
+  .summary-ticket{background:var(--paper); color:var(--ink); border-radius:4px; padding:22px; align-self:start;}
+  .summary-ticket .label{font-size:12px; color:var(--brass-dark);}
+  .summary-ticket .row{display:flex; justify-content:space-between; font-size:13.5px; padding:8px 0; border-bottom:1px dashed var(--line);}
+  .summary-ticket .row:last-child{border-bottom:none;}
+  .summary-ticket .row b{text-align:right; max-width:60%;}
+  @media (max-width:840px){ .booking-shell{grid-template-columns:1fr; padding:26px;} }
+
+  /* ---------- AUTH PAGE ---------- */
+  .auth-page-wrap{display:flex; justify-content:center;}
+  .auth-card{
+    display:grid; grid-template-columns:1fr 1fr; max-width:920px; width:100%;
+    border-radius:18px; overflow:hidden; background:#fff;
+    box-shadow:0 30px 60px rgba(59,42,46,0.16), 0 4px 14px rgba(59,42,46,0.08);
+  }
+
+  .auth-visual{
+    position:relative; overflow:hidden; color:#fff; padding:40px 36px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    background:linear-gradient(160deg, var(--ink) 0%, #8C4E56 55%, #D9A441 120%);
+    min-height:560px;
+  }
+  .auth-visual-deco{position:absolute; inset:0; width:100%; height:100%;}
+  .auth-visual-top{position:relative; z-index:1;}
+  .auth-visual-logo{font-family:'Taviraj',serif; font-size:22px; font-weight:600;}
+  .auth-visual-logo span{color:#CFE3FA;}
+  .auth-visual-tag{font-size:12.5px; color:rgba(255,255,255,0.65); margin-top:4px; letter-spacing:0.2px;}
+  .auth-visual-quote{
+    position:relative; z-index:1; font-family:'Taviraj',serif; font-size:22px; line-height:1.5;
+    max-width:280px;
+  }
+  .auth-visual-quote small{
+    display:block; font-family:'IBM Plex Sans Thai',sans-serif; font-size:12.5px;
+    color:rgba(255,255,255,0.6); margin-top:14px; font-weight:400;
+  }
+
+  .auth-form-panel{padding:44px 42px; display:flex; flex-direction:column; justify-content:center;}
+  .auth-form-logo{
+    display:flex; align-items:center; gap:8px; font-family:'Taviraj',serif; font-size:15px;
+    color:var(--brass-dark); margin-bottom:22px;
+  }
+  .auth-form-logo svg{color:var(--brass);}
+  .auth-form-title{font-size:25px;}
+  .auth-form-sub{font-size:13.5px; color:#8A7368; margin-top:6px; margin-bottom:26px;}
+
+  .auth-input-group{position:relative; margin-bottom:14px;}
+  .auth-input-group input{
+    width:100%; padding:12px 14px 12px 40px; border:1px solid #E9D9CC; border-radius:8px;
+    background:#FBF6F1; font-size:14.5px; color:var(--ink); font-family:inherit;
+  }
+  .auth-input-group input::placeholder{color:#C2AA9E;}
+  .auth-input-group input:focus{outline:none; border-color:var(--brass); background:#fff;}
+  .auth-input-icon{position:absolute; left:13px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:#B39A8E; pointer-events:none;}
+  .auth-input-toggle{position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:#B39A8E; display:flex;}
+  .auth-input-toggle:hover{color:var(--brass-dark);}
+
+  .auth-row{display:flex; justify-content:space-between; align-items:center; margin:6px 0 20px; font-size:13px;}
+  .auth-checkbox{display:flex; align-items:center; gap:6px; color:#6B5854; cursor:pointer;}
+  .auth-checkbox input{width:14px; height:14px; accent-color:var(--brass);}
+  .auth-link{color:var(--brass-dark); cursor:pointer; text-decoration:none; font-size:13px;}
+  .auth-link:hover{text-decoration:underline;}
+
+  .auth-submit{width:100%; padding:13px; border-radius:8px; font-size:15px;}
+
+  .auth-divider{display:flex; align-items:center; gap:12px; margin:22px 0; font-size:12.5px; color:#B39A8E;}
+  .auth-divider::before, .auth-divider::after{content:''; flex:1; height:1px; background:#EEDFD3;}
+
+  .auth-social-btn{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:11px;
+    border-radius:8px; border:1px solid #E9D9CC; background:#fff; cursor:pointer; font-size:14px;
+    color:var(--ink); font-family:inherit;
+  }
+  .auth-social-btn:hover{border-color:var(--brass);}
+
+  .auth-switch{text-align:center; margin-top:22px; font-size:13.5px; color:#6B5854;}
+  .auth-switch a{color:var(--brass-dark); cursor:pointer; font-weight:500; text-decoration:none;}
+  .auth-switch a:hover{text-decoration:underline;}
+
+  @media (max-width:760px){
+    .auth-card{grid-template-columns:1fr; max-width:420px;}
+    .auth-visual{display:none;}
+    .auth-form-panel{padding:36px 26px;}
+  }
+
+  /* ---------- PROFILE PAGE ---------- */
+  .profile-shell{display:grid; grid-template-columns:280px 1fr; gap:30px;}
+  .profile-card{background:var(--paper-2); border:1px solid var(--line); border-radius:6px; padding:26px; align-self:start; text-align:center;}
+  .profile-card .avatar-lg{margin:0 auto 14px;}
+  .profile-card h3{color:var(--ink);}
+  .profile-card .phone{color:var(--brass-dark); font-size:13.5px; margin-top:4px;}
+  @media (max-width:760px){ .profile-shell{grid-template-columns:1fr;} }
+
+  /* ---------- SUCCESS PAGE ---------- */
+  .success-wrap{max-width:480px; margin:0 auto; text-align:center;}
+  .success-ticket{background:var(--paper-2); border:1px solid var(--line); border-radius:6px; padding:36px;}
+  .success-ticket .check{width:52px; height:52px; border-radius:50%; background:var(--sage); color:var(--cream); display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 18px;}
+  .success-ticket .code{font-family:'Taviraj',serif; font-size:34px; font-weight:700; color:var(--rust); letter-spacing:1px;}
+  .success-ticket .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px; text-align:left; font-size:14px; margin-top:22px; border-top:1px dashed var(--line); padding-top:20px;}
+  .success-ticket .grid2 span{display:block; color:#8A7368; font-size:11.5px; margin-bottom:2px;}
+  .status-badge{display:inline-block; margin-top:16px; font-size:12.5px; padding:4px 14px; border-radius:14px; background:#F3E3D6; color:#8B5E3C;}
+
+  /* ---------- LOOKUP PAGE ---------- */
+  .lookup-form{background:var(--paper-2); border:1px solid var(--line); border-radius:6px; padding:26px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;}
+  .lookup-form input{flex:1; min-width:200px; background:#fff; color:var(--ink); border:1px solid #E3CBB8;}
+  .lookup-results{margin-top:24px; display:flex; flex-direction:column; gap:14px;}
+  .lookup-card{background:var(--paper-2); border:1px solid var(--line); border-radius:4px; padding:20px;}
+  .lookup-card .lc-top{display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;}
+  .lookup-card .lc-code{font-family:'Taviraj',serif; font-size:20px; font-weight:600; color:var(--rust);}
+  .lookup-card .lc-meta{font-size:13.5px; color:#4A3A3D; margin-top:8px; line-height:1.9;}
+  .lookup-card .lc-actions{margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;}
+  .badge{font-size:12px; padding:3px 12px; border-radius:12px;}
+  .badge.pending{background:#F3E3D6; color:#8B5E3C;}
+  .badge.confirmed{background:var(--sage); color:var(--cream);}
+  .badge.cancelled{background:#EDE3DC; color:#8A7368; text-decoration:line-through;}
+  .edit-block{margin-top:16px; border-top:1px dashed var(--line); padding-top:16px; display:none;}
+  .edit-block.open{display:block;}
+  .empty-note{color:#8A7368; font-size:14.5px; padding:16px 0;}
+
+  /* ---------- FOOTER ---------- */
+  .contact{background:var(--ink); color:var(--cream);}
+  .contact .wrap{display:grid; grid-template-columns:1fr 1fr; gap:40px; padding-top:56px; padding-bottom:36px;}
+  .contact h2{font-size:24px;}
+  .contact .info-row{margin-top:16px; font-size:14.5px; color:rgba(234,243,255,0.8);}
+  .contact .info-row b{display:block; color:var(--brass); font-size:12px; margin-bottom:3px; font-weight:500;}
+  .foot-note{border-top:1px solid rgba(234,243,255,0.15); padding:16px 24px; font-size:12px; color:rgba(234,243,255,0.45); text-align:center;}
+
+  /* ---------- HERO IMAGE ---------- */
+  .hero .wrap{align-items:center;}
+  .hero-media{border-radius:6px; overflow:hidden; box-shadow:0 18px 40px rgba(0,0,0,0.3); aspect-ratio:4/3;}
+  .hero-media img{width:100%; height:100%; object-fit:cover; display:block;}
+  .hero-card{margin-top:16px;}
+
+  /* ---------- CARD THUMBNAILS ---------- */
+  .feat-card{overflow:hidden; padding:0;}
+  .feat-card .fthumb{width:100%; aspect-ratio:4/3; object-fit:cover; display:block;}
+  .feat-card .fbody{padding:18px 20px;}
+  .service-row .sthumb{width:76px; height:76px; min-width:76px; border-radius:6px; object-fit:cover;}
+
+  /* ---------- GALLERY PAGE ---------- */
+  .gallery-filters{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px;}
+  .gallery-filter{font-size:13.5px; padding:8px 16px; border-radius:20px; border:1px solid var(--line); background:var(--paper); cursor:pointer; color:var(--ink);}
+  .gallery-filter.active{background:var(--ink); color:var(--cream); border-color:var(--ink);}
+  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .gallery-item{position:relative; border-radius:6px; overflow:hidden; aspect-ratio:1/1;}
+  .gallery-item img{width:100%; height:100%; object-fit:cover; display:block;}
+  .gallery-item .gi-cap{position:absolute; left:0; right:0; bottom:0; padding:10px 12px; font-size:12.5px; color:#fff; background:linear-gradient(0deg, rgba(0,0,0,0.55), transparent);}
+  @media (max-width:800px){ .gallery-grid{grid-template-columns:repeat(2,1fr);} }
+
+  /* ---------- REVIEWS PAGE ---------- */
+  .review-summary{display:flex; align-items:center; gap:20px; background:var(--paper-2); border:1px solid var(--line); border-radius:6px; padding:24px; margin-bottom:28px; flex-wrap:wrap;}
+  .review-summary .rs-score{font-family:'Taviraj',serif; font-size:42px; font-weight:700; color:var(--rust);}
+  .review-list{display:flex; flex-direction:column; gap:14px;}
+  .review-card{background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:20px;}
+  .review-card .rc-top{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;}
+  .review-card .rc-name{font-weight:500;}
+  .review-card .rc-date{font-size:12.5px; color:#8A7368;}
+  .review-card .rc-barber{font-size:12.5px; color:var(--brass-dark); margin-top:4px;}
+  .review-card .rc-text{margin-top:10px; font-size:14.5px; color:#4A3A3D;}
+  .review-form{background:var(--paper-2); border:1px solid var(--line); border-radius:6px; padding:22px; margin-top:26px;}
+  .star-picker{display:flex; gap:6px; font-size:26px; margin:10px 0 16px;}
+  .star-picker span{cursor:pointer; color:#E9D9CC;}
+  .star-picker span.on{color:var(--brass);}
+
+  /* ---------- MAP ---------- */
+  .map-frame{border-radius:6px; overflow:hidden; margin-top:18px; border:1px solid rgba(234,243,255,0.2);}
+  .map-frame iframe{width:100%; height:220px; border:0; display:block;}
+
+  /* ---------- SLOT LEGEND ---------- */
+  .slot-legend{display:flex; gap:16px; font-size:12.5px; color:rgba(234,243,255,0.7); margin-bottom:10px;}
+  .slot-legend span{display:inline-flex; align-items:center; gap:6px;}
+  .slot-legend .dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+  .dot-open{background:#7CBF8E;}
+  .dot-full{background:#D9534F;}
+  .slot-btn{display:flex; flex-direction:column; align-items:center; gap:3px;}
+  .slot-btn .dot{width:6px; height:6px; border-radius:50%;}
+  .slot-btn:disabled .dot{background:#D9534F;}
+  .slot-btn:not(:disabled) .dot{background:#7CBF8E;}
+  .slot-btn .st{font-size:10px; opacity:0.75;}
+
+  /* ---------- PROFILE TABS ---------- */
+  .profile-tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; border-bottom:1px solid var(--line); padding-bottom:10px;}
+  .profile-tab{font-size:13.5px; padding:8px 14px; border-radius:20px; cursor:pointer; color:#8A7368; background:transparent; border:1px solid transparent;}
+  .profile-tab.active{background:var(--ink); color:var(--cream);}
+  .fav-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
+  .fav-item{display:flex; justify-content:space-between; align-items:center; background:var(--paper-2); border:1px solid var(--line); border-radius:6px; padding:12px 14px; font-size:14px;}
+  .fav-item .heart{cursor:pointer; font-size:16px;}
+  .pw-form input{max-width:320px; background:#FBF6F1; color:var(--ink); border:1px solid #E9D9CC;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <div class="brand" onclick="navigate('home')">ซาลอน<span> เจริญผล</span></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a data-nav="home" onclick="navigate('home')">หน้าแรก</a></li>
+      <li><a data-nav="services" onclick="navigate('services')">บริการ</a></li>
+      <li><a data-nav="barbers" onclick="navigate('barbers')">ช่างทำผม</a></li>
+      <li><a data-nav="gallery" onclick="navigate('gallery')">ผลงานของเรา</a></li>
+      <li><a data-nav="reviews" onclick="navigate('reviews')">รีวิว</a></li>
+      <li><a data-nav="lookup" onclick="navigate('lookup')">ตรวจสอบการจอง</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-auth" id="navAuth"></div>
+      <button class="nav-cta" onclick="navigate('booking')">จองคิว</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ PAGE: HOME ============ -->
+<div class="page" id="page-home">
+  <header class="hero">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow" style="color:var(--brass);">ซาลอนทำผมผู้หญิงย่านเจริญกรุง · เปิดให้บริการตั้งแต่ปี 2535</div>
+        <h1>ทำผมสวย นัดหมายง่าย<br>เลือกช่าง เลือกเวลาได้เอง</h1>
+        <p class="tag">จองล่วงหน้าออนไลน์ เลือกช่างที่ถนัด เลือกวันเวลาที่สะดวก ไม่ต้องโทรจอง ไม่ต้องรอคิวหน้าร้าน</p>
+        <div class="cta-row">
+          <button class="btn btn-primary" onclick="navigate('booking')">จองคิวเลย</button>
+          <button class="btn btn-ghost" onclick="navigate('services')">ดูบริการทั้งหมด</button>
+        </div>
+        <p class="hero-hours">เปิดทุกวัน อังคาร–อาทิตย์ 09:00–19:00 น. · หยุดทุกวันจันทร์</p>
+      </div>
+      <div>
+        <div class="hero-media">
+          <img src="./images/salonhero.jpg" alt="บรรยากาศร้านซาลอน เจริญผล" loading="lazy" />
+        </div>
+        <div class="hero-card">
+          <div class="label">โปรโมชั่นประจำเดือนนี้</div>
+          <h3>แพ็กเกจตัด + สระ + ทรีตเมนต์</h3>
+          <div class="row"><span>ราคาปกติ 690 บาท</span><b style="color:var(--rust)">เหลือ 550 บาท</b></div>
+          <div class="row"><span>ใช้ได้ถึง</span><b>สิ้นเดือนนี้</b></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">โปรโมชั่น</div>
+        <h2>ดีลพิเศษสำหรับลูกค้า</h2>
+      </div>
+      <div class="promo-grid" id="promoGrid"></div>
+    </div>
+  </section>
+
+  <section style="background:var(--paper-2);">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">บริการเด่น</div>
+        <h2>บริการยอดนิยม</h2>
+        <p>คลิกเลือกบริการเพื่อไปจองคิวได้ทันที</p>
+      </div>
+      <div class="feat-grid" id="featServiceGrid"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">ช่างแนะนำ</div>
+        <h2>ช่างประจำเดือนนี้</h2>
+      </div>
+      <div class="feat-barber" id="featBarber"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE: SERVICES ============ -->
+<div class="page" id="page-services">
+  <section style="padding-top:48px;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">บริการทั้งหมด</div>
+        <h2>รายการบริการและราคา</h2>
+        <p>ราคาเดียว ไม่มีบวกเพิ่ม เลือกบริการที่ต้องการเพื่อจองคิวได้เลย</p>
+      </div>
+      <div class="service-list" id="serviceList"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE: BARBERS ============ -->
+<div class="page" id="page-barbers">
+  <section style="padding-top:48px;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">ช่างทำผม</div>
+        <h2>ทีมช่างของเรา</h2>
+        <p>เลือกช่างที่ถนัดในสไตล์ที่คุณต้องการ แล้วจองคิวกับช่างคนนั้นได้โดยตรง</p>
+      </div>
+      <div class="barbers-grid" id="barberDetailGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE: GALLERY ============ -->
+<div class="page" id="page-gallery">
+  <section style="padding-top:48px;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">ผลงานของเรา</div>
+        <h2>แกลเลอรีผลงานลูกค้า</h2>
+        <p>ตัวอย่างผลงานตัด สี ดัด ยืด และทรงผมออกงานจากช่างของเรา</p>
+      </div>
+      <div class="gallery-filters" id="galleryFilters"></div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE: REVIEWS ============ -->
+<div class="page" id="page-reviews">
+  <section style="padding-top:48px;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">รีวิวจากลูกค้า</div>
+        <h2>ลูกค้าพูดถึงเราว่าอย่างไร</h2>
+        <p>ความคิดเห็นจริงจากลูกค้าที่เคยใช้บริการ</p>
+      </div>
+      <div class="review-summary" id="reviewSummary"></div>
+      <div class="review-list" id="reviewList"></div>
+
+      <div class="review-form" id="reviewForm">
+        <h3 style="font-size:18px;">เขียนรีวิวของคุณ</h3>
+        <p style="font-size:13px; color:#8A7368; margin-top:4px;">กรุณาเข้าสู่ระบบเพื่อเขียนรีวิว</p>
+        <div id="reviewFormInner" style="display:none; margin-top:14px;">
+          <div class="star-picker" id="starPicker">
+            <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+          </div>
+          <textarea id="reviewText" placeholder="เล่าประสบการณ์การใช้บริการของคุณ"></textarea>
+          <button class="btn btn-primary" id="reviewSubmitBtn" style="margin-top:14px;">ส่งรีวิว</button>
+          <div class="form-error" id="reviewError">กรุณาให้คะแนนและเขียนรีวิวก่อนส่ง</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE: BOOKING ============ -->
+<div class="page" id="page-booking">
+  <section style="padding-top:48px;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">จองคิว</div>
+        <h2>จองคิวทำผม</h2>
+        <p>เลือกบริการ ช่าง วันที่ และเวลาที่สะดวก จากนั้นกรอกข้อมูลติดต่อของคุณ</p>
+      </div>
+
+      <div class="booking-shell" id="bookingShell">
+        <div id="bookingFormArea">
+          <span class="field-label">เลือกบริการ</span>
+          <div class="choice-grid" id="bkServiceChoices"></div>
+
+          <span class="field-label">เลือกช่าง</span>
+          <div class="choice-grid" id="bkBarberChoices"></div>
+
+          <span class="field-label">เลือกวันที่</span>
+          <input type="date" id="bkDate" />
+          <div class="closed-note" id="bkClosedNote" style="display:none;">ร้านปิดทุกวันจันทร์ กรุณาเลือกวันอื่น</div>
+
+          <span class="field-label">เลือกเวลา</span>
+          <div class="slot-legend"><span><i class="dot dot-open"></i>ว่าง</span><span><i class="dot dot-full"></i>ไม่ว่าง</span></div>
+          <div id="bkSlotArea"><div class="slot-empty">กรุณาเลือกบริการ ช่าง และวันที่ก่อน</div></div>
+
+          <span class="field-label">จำนวนผู้ใช้บริการ (ไม่บังคับ)</span>
+          <input type="text" id="bkPeople" placeholder="1 คน" value="1" inputmode="numeric" style="max-width:140px;" />
+
+          <span class="field-label">ชื่อผู้จอง</span>
+          <input type="text" id="bkName" placeholder="เช่น คุณสมหญิง" />
+
+          <span class="field-label">เบอร์โทร</span>
+          <input type="tel" id="bkPhone" placeholder="08x-xxx-xxxx" />
+
+          <span class="field-label">หมายเหตุ (ไม่บังคับ)</span>
+          <textarea id="bkNote" placeholder="เช่น ต้องการสีผมโทนน้ำตาลอ่อน หรือแพ้น้ำยาบางชนิด"></textarea>
+
+          <div class="booking-actions">
+            <button class="btn btn-primary" id="bkSubmitBtn">ยืนยันการจอง</button>
+            <div class="form-error" id="bkError">กรุณาเลือกบริการ ช่าง วันที่ เวลา และกรอกชื่อ-เบอร์โทรให้ครบ</div>
+          </div>
+        </div>
+
+        <div class="summary-ticket" id="bkSummary">
+          <div class="label">สรุปการจอง</div>
+          <div class="row"><span>บริการ</span><b id="sumService">ยังไม่ได้เลือก</b></div>
+          <div class="row"><span>ช่าง</span><b id="sumBarber">ยังไม่ได้เลือก</b></div>
+          <div class="row"><span>วันที่</span><b id="sumDate">ยังไม่ได้เลือก</b></div>
+          <div class="row"><span>เวลา</span><b id="sumTime">ยังไม่ได้เลือก</b></div>
+          <div class="row"><span>ราคา</span><b id="sumPrice">—</b></div>
+          <div class="row"><span>ระยะเวลา</span><b id="sumDuration">—</b></div>
+          <div class="row"><span>จำนวนคน</span><b id="sumPeople">1 คน</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE: SUCCESS ============ -->
+<div class="page" id="page-success">
+  <section style="padding-top:56px;">
+    <div class="wrap success-wrap">
+      <div class="success-ticket" id="successTicket"></div>
+      <div style="margin-top:16px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn btn-outline" id="successCalendarBtn">เพิ่มลงปฏิทิน</button>
+        <button class="btn btn-outline" id="successCancelBtn" style="color:var(--rust); border-color:var(--rust);">ยกเลิกการจอง</button>
+      </div>
+      <div style="margin-top:12px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="navigate('lookup')">ตรวจสอบการจอง</button>
+        <button class="btn btn-dark" onclick="navigate('home')">กลับหน้าแรก</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE: LOOKUP ============ -->
+<div class="page" id="page-lookup">
+  <section style="padding-top:48px;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">ตรวจสอบการจอง</div>
+        <h2>ค้นหาการจองของคุณ</h2>
+        <p>กรอกรหัสการจอง หรือเบอร์โทรศัพท์ที่ใช้ตอนจอง</p>
+      </div>
+      <div class="lookup-form">
+        <input type="text" id="lookupInput" placeholder="เช่น CP-4821 หรือ 081-234-5678" />
+        <button class="btn btn-primary" id="lookupBtn">ค้นหา</button>
+      </div>
+      <div class="lookup-results" id="lookupResults"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE: LOGIN / REGISTER ============ -->
+<div class="page" id="page-login">
+  <section style="padding:36px 0 60px;">
+    <div class="auth-page-wrap">
+      <div class="auth-card">
+
+        <!-- Visual side -->
+        <div class="auth-visual">
+          <svg class="auth-visual-deco" viewBox="0 0 360 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="330" cy="40" r="120" fill="rgba(255,255,255,0.06)"/>
+            <circle cx="10" cy="480" r="150" fill="rgba(255,255,255,0.05)"/>
+            <path d="M60 250 C90 210 150 210 175 250 C150 290 90 290 60 250 Z" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+            <path d="M117 195 C117 195 117 250 117 305" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+            <path d="M117 220 C90 210 70 185 75 155" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+            <path d="M117 220 C144 210 164 185 159 155" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          </svg>
+          <div class="auth-visual-top">
+            <div class="auth-visual-logo">ซาลอน<span> เจริญผล</span></div>
+            <p class="auth-visual-tag">Your Journey, Our Beauty</p>
+          </div>
+          <div class="auth-visual-quote">
+            “ผมสวย มั่นใจในทุกวัน<br>ดูแลคุณในทุกช่วงเวลา”
+            <small>บริการโดยช่างมืออาชีพ ย่านเจริญกรุง</small>
+          </div>
+        </div>
+
+        <!-- Form side -->
+        <div class="auth-form-panel">
+
+          <div id="loginForm">
+            <div class="auth-form-logo">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3c-4 3-2 7 0 9-2-1-6 0-7 4 5 1 8-1 9-4 1 3 4 5 9 4-1-4-5-5-7-4 2-2 4-6 0-9-1 1-2 2-2 4 0-2-1-3-2-4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              ซาลอน เจริญผล
+            </div>
+            <h2 class="auth-form-title" id="authTitle">เข้าสู่ระบบ</h2>
+            <p class="auth-form-sub" id="authSubtitle">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
+
+            <div class="auth-input-group">
+              <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11.6 21 3 12.4 3 2.7c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1L6.6 10.8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              <input type="tel" id="loginPhone" placeholder="เบอร์โทร" />
+            </div>
+
+            <div class="auth-input-group">
+              <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.4"/></svg>
+              <input type="password" id="loginPassword" placeholder="รหัสผ่าน" />
+              <span class="auth-input-toggle" id="loginPwToggle" title="แสดง/ซ่อนรหัสผ่าน">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.4"/></svg>
+              </span>
+            </div>
+
+            <div class="auth-row">
+              <label class="auth-checkbox"><input type="checkbox" id="loginRemember" checked /> จดจำฉันไว้</label>
+              <a class="auth-link" onclick="alert('ระบบรีเซ็ตรหัสผ่านยังไม่เปิดใช้งาน กรุณาติดต่อร้านที่ 02-234-5678')">ลืมรหัสผ่าน?</a>
+            </div>
+
+            <button class="btn btn-primary auth-submit" id="loginBtn">เข้าสู่ระบบ</button>
+            <div class="form-error" id="loginError">เบอร์โทรหรือรหัสผ่านไม่ถูกต้อง</div>
+
+            <div class="auth-divider"><span>หรือ</span></div>
+
+            <button class="auth-social-btn" onclick="alert('ยังไม่เปิดให้เข้าสู่ระบบด้วย Google ในขณะนี้')">
+              <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.5 12.3c0-.9-.1-1.6-.2-2.3H12v4.4h6.5c-.3 1.5-1.1 2.7-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.7z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.1-4 1.1-3.1 0-5.7-2.1-6.6-4.9H1.4v3.1C3.3 21.3 7.3 24 12 24z"/><path fill="#FBBC05" d="M5.4 14.3c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3V6.6H1.4C.5 8.3 0 10.1 0 12s.5 3.7 1.4 5.4l4-3.1z"/><path fill="#EA4335" d="M12 4.8c1.7 0 3.3.6 4.5 1.8l3.4-3.4C17.9 1.2 15.2 0 12 0 7.3 0 3.3 2.7 1.4 6.6l4 3.1c.9-2.8 3.5-4.9 6.6-4.9z"/></svg>
+              เข้าสู่ระบบด้วย Google
+            </button>
+
+            <p class="auth-switch">ยังไม่มีบัญชี? <a onclick="showAuthForm('register')">สมัครสมาชิก</a></p>
+          </div>
+
+          <div id="registerForm" style="display:none;">
+            <div class="auth-form-logo">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3c-4 3-2 7 0 9-2-1-6 0-7 4 5 1 8-1 9-4 1 3 4 5 9 4-1-4-5-5-7-4 2-2 4-6 0-9-1 1-2 2-2 4 0-2-1-3-2-4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              ซาลอน เจริญผล
+            </div>
+            <h2 class="auth-form-title">สมัครสมาชิก</h2>
+            <p class="auth-form-sub">สมัครสมาชิกเพื่อจองคิวได้สะดวกและติดตามประวัติการจอง</p>
+
+            <div class="auth-input-group">
+              <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" stroke="currentColor" stroke-width="1.4"/></svg>
+              <input type="text" id="regName" placeholder="ชื่อ-นามสกุล" />
+            </div>
+
+            <div class="auth-input-group">
+              <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11.6 21 3 12.4 3 2.7c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1L6.6 10.8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              <input type="tel" id="regPhone" placeholder="เบอร์โทร" />
+            </div>
+
+            <div class="auth-input-group">
+              <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.4"/></svg>
+              <input type="password" id="regPassword" placeholder="ตั้งรหัสผ่าน" />
+              <span class="auth-input-toggle" id="regPwToggle" title="แสดง/ซ่อนรหัสผ่าน">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.4"/></svg>
+              </span>
+            </div>
+
+            <div class="auth-input-group">
+              <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.4"/></svg>
+              <input type="password" id="regPassword2" placeholder="ยืนยันรหัสผ่าน" />
+              <span class="auth-input-toggle" id="regPw2Toggle" title="แสดง/ซ่อนรหัสผ่าน">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.4"/></svg>
+              </span>
+            </div>
+
+            <label class="auth-checkbox" style="margin:4px 0 16px;">
+              <input type="checkbox" id="regPdpa" />
+              ฉันยอมรับ<a class="auth-link" onclick="event.preventDefault(); alert('นโยบายความเป็นส่วนตัว (PDPA): ร้านเก็บชื่อ เบอร์โทร และประวัติการจองของท่าน เพื่อใช้ในการจัดการคิวและติดต่อกลับเท่านั้น ไม่เปิดเผยต่อบุคคลภายนอก')" style="margin:0 4px;">ข้อกำหนดความเป็นส่วนตัว (PDPA)</a>ก่อนสมัครสมาชิก
+            </label>
+            <button class="btn btn-primary auth-submit" id="registerBtn" style="margin-top:6px;">สมัครสมาชิก</button>
+            <div class="form-error" id="registerError">กรุณากรอกข้อมูลให้ครบถ้วน</div>
+
+            <p class="auth-switch">มีบัญชีอยู่แล้ว? <a onclick="showAuthForm('login')">เข้าสู่ระบบ</a></p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE: PROFILE ============ -->
+<div class="page" id="page-profile">
+  <section style="padding-top:48px;">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">บัญชีของฉัน</div>
+        <h2>โปรไฟล์</h2>
+        <p>ดูข้อมูลบัญชีและประวัติการจองของคุณ</p>
+      </div>
+      <div class="profile-shell">
+        <div class="profile-card" id="profileCard"></div>
+        <div id="profileMain">
+          <div class="profile-tabs" id="profileTabs"></div>
+          <div id="profileTabContent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<section class="contact">
+  <div class="wrap">
+    <div>
+      <h2>มาหาเราได้ที่ร้าน</h2>
+      <div class="info-row"><b>ที่อยู่</b>ซอยเจริญกรุง 45 เขตบางรัก กรุงเทพฯ 10500</div>
+      <div class="info-row" style="opacity:0.75;">สำหรับลูกค้าผู้หญิงทุกวัย บริการโดยช่างมืออาชีพ</div>
+      <div class="info-row"><b>โทรศัพท์</b>02-234-5678</div>
+      <div class="info-row"><b>เวลาทำการ</b>อังคาร–อาทิตย์ 09:00–19:00 น. (หยุดทุกวันจันทร์)</div>
+      <div class="map-frame">
+        <iframe title="แผนที่ร้านซาลอน เจริญผล" loading="lazy"
+          src="https://maps.google.com/maps?q=%E0%B8%8B%E0%B8%AD%E0%B8%A2%E0%B9%80%E0%B8%88%E0%B8%A3%E0%B8%B4%E0%B8%8D%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%2045%20%E0%B9%80%E0%B8%82%E0%B8%95%E0%B8%9A%E0%B8%B2%E0%B8%87%E0%B8%A3%E0%B8%B1%E0%B8%81%20%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B9%80%E0%B8%97%E0%B8%9E%E0%B8%AF&output=embed"></iframe>
+      </div>
+      <div style="margin-top:12px;">
+        <a class="btn btn-ghost" href="https://www.google.com/maps/dir/?api=1&destination=%E0%B8%8B%E0%B8%AD%E0%B8%A2%E0%B9%80%E0%B8%88%E0%B8%A3%E0%B8%B4%E0%B8%8D%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%2045%20%E0%B9%80%E0%B8%82%E0%B8%95%E0%B8%9A%E0%B8%B2%E0%B8%87%E0%B8%A3%E0%B8%B1%E0%B8%81%20%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B9%80%E0%B8%97%E0%B8%9E%E0%B8%AF" target="_blank" rel="noopener">นำทางมาร้าน</a>
+      </div>
+    </div>
+    <div>
+      <h2>จองคิวออนไลน์ ง่ายกว่าที่คิด</h2>
+      <div class="info-row">เลือกบริการและช่างที่ต้องการล่วงหน้า</div>
+      <div class="info-row">รู้วันเวลาแน่นอน ไม่ต้องรอคิวหน้าร้าน</div>
+      <div class="info-row">ตรวจสอบหรือยกเลิกคิวได้ทุกเมื่อด้วยเบอร์โทร</div>
+    </div>
+  </div>
+  <div class="foot-note">ข้อมูลการจองในเว็บนี้เก็บแบบใช้ร่วมกัน ผู้ที่เปิดหน้านี้ทุกคนจะเห็นและค้นหาข้อมูลชุดเดียวกัน</div>
+</section>
+
+<script>
+/* ============ DATA ============ */
+const BARBERS = [
+  { id:'ploy', name:'ช่างพลอย', role:'ผู้ก่อตั้งร้าน', specialty:'ทรงผมออกงาน และทำสีผม', exp:'ประสบการณ์ 20 ปี', initials:'พลอย', color:'var(--rust)', rating:4.9, reviews:230 },
+  { id:'nan', name:'ช่างแนน', role:'ช่างประจำร้าน', specialty:'ดัดผม และยืดผม', exp:'ประสบการณ์ 10 ปี', initials:'แนน', color:'var(--brass-dark)', rating:4.7, reviews:112 },
+  { id:'mint', name:'ช่างมิ้นท์', role:'ช่างประจำร้าน', specialty:'ตัดผมแฟชั่น และทรีตเมนต์', exp:'ประสบการณ์ 6 ปี', initials:'มิ้นท์', color:'var(--sage)', rating:4.8, reviews:78 },
+];
+
+const SERVICES = [
+  { id:'cut', name:'ตัดผมหญิง', desc:'ตัด+เก็บทรงตามความยาวเดิม', price:250, duration:40, popular:true, img:'./images/svc-cut.jpg' },
+  { id:'cutwash', name:'ตัดผม + สระ + ไดร์', desc:'ตัดผมพร้อมสระและไดร์จัดทรง', price:390, duration:60, popular:true, img:'./images/svc-cutwash.jpg' },
+  { id:'blowdry', name:'สระ + ไดร์จัดทรง', desc:'สระผมและไดร์จัดทรงพร้อมออกงาน', price:250, duration:40, popular:true, img:'./images/svc-blowdry.jpg' },
+  { id:'color', name:'ทำสีผม', desc:'ทำสีผมทั้งศีรษะพร้อมทรีตเมนต์บำรุง', price:1200, duration:120, popular:false, img:'./images/svc-color.jpg' },
+  { id:'perm', name:'ดัดผม', desc:'ดัดลอน หรือดัดยืดตามสไตล์ที่ต้องการ', price:1500, duration:150, popular:false, img:'./images/svc-perm.jpg' },
+  { id:'straight', name:'ยืดผม', desc:'ยืดผมเรียบเงางาม ทนนาน', price:1800, duration:180, popular:false, img:'./images/svc-straight.jpg' },
+  { id:'treatment', name:'ทรีตเมนต์บำรุงผม', desc:'บำรุงลึกซ่อมแซมผมเสีย คืนความเงางาม', price:450, duration:45, popular:false, img:'./images/svc-treatment.jpg' },
+  { id:'updo', name:'จัดแต่งทรงผมออกงาน', desc:'เก็บผมทรงพิเศษสำหรับงานสำคัญ', price:600, duration:60, popular:false, img:'./images/svc-updo.jpg' },
+];
+
+const GALLERY_ITEMS = [
+  { cat:'cut', label:'ตัดผม', img:'./images/gal-cut1.jpg' },
+  { cat:'cut', label:'ตัดผม', img:'./images/gal-cut2.jpg' },
+  { cat:'color', label:'ทำสี', img:'./images/gal-color1.jpg' },
+  { cat:'color', label:'ทำสี', img:'./images/gal-color2.jpg' },
+  { cat:'perm', label:'ดัดผม', img:'./images/gal-perm1.jpg' },
+  { cat:'perm', label:'ดัดผม', img:'./images/gal-perm2.jpg' },
+  { cat:'straight', label:'ยืดผม', img:'./images/gal-straight1.jpg' },
+  { cat:'straight', label:'ยืดผม', img:'./images/gal-straight2.jpg' },
+  { cat:'updo', label:'ทรงผมออกงาน', img:'./images/gal-updo1.jpg' },
+  { cat:'updo', label:'ทรงผมออกงาน', img:'./images/gal-updo2.jpg' },
+  { cat:'treatment', label:'ทรีตเมนต์', img:'./images/gal-treat1.jpg' },
+  { cat:'treatment', label:'ทรีตเมนต์', img:'./images/gal-treat2.jpg' },
+];
+
+const STATIC_REVIEWS = [
+  { name:'คุณสมหญิง', barberId:'ploy', rating:5, text:'ช่างบริการดีมาก ทำสีออกมาตรงตามที่ต้องการค่ะ', date:'2569-08-12', static:true },
+  { name:'คุณนภา', barberId:'mint', rating:5, text:'ตัดผมสวยมาก เข้าใจสไตล์ที่ต้องการตั้งแต่ครั้งแรก', date:'2569-07-30', static:true },
+  { name:'คุณพิมพ์', barberId:'nan', rating:4, text:'ดัดผมออกมาลอนสวยเป็นธรรมชาติดี บริการเป็นกันเอง', date:'2569-07-18', static:true },
+  { name:'คุณอรุณี', barberId:'ploy', rating:5, text:'จองคิวออนไลน์สะดวกมาก ไม่ต้องรอคิวหน้าร้านเลย', date:'2569-06-25', static:true },
+  { name:'คุณวารี', barberId:'mint', rating:5, text:'ทรีตเมนต์บำรุงผมช่วยได้เยอะมาก ผมนุ่มลื่นขึ้นจริง', date:'2569-06-02', static:true },
+];
+
+const PROMOTIONS = [
+  { tag:'ทุกวันอังคาร', title:'โปรอังคารสุขใจ', desc:'ลดทุกบริการ 10% เฉพาะวันอังคารตลอดวัน' },
+  { tag:'แนะนำเพื่อน', title:'ชวนเพื่อนมาทำผม', desc:'แนะนำเพื่อนมาใช้บริการ รับส่วนลดคนละ 50 บาท' },
+  { tag:'แพ็กเกจ', title:'ตัด + สระ + ทรีตเมนต์', desc:'ราคาพิเศษ 550 บาท จากปกติ 690 บาท ถึงสิ้นเดือนนี้' },
+];
+
+const OPEN_TIME = '09:00';
+const CLOSE_TIME = '19:00';
+const SLOT_INTERVAL = 30; // minutes
+const CLOSED_WEEKDAY = 1; // Monday
+
+let bookingDraft = { serviceId:null, barberId:null };
+let currentSuccessBooking = null;
+
+/* ============ STORAGE ============ */
+async function loadBookings(){
+  try{
+    const raw = localStorage.getItem('bookings');
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+async function saveBookings(list){
+  try{
+    localStorage.setItem('bookings', JSON.stringify(list));
+  }catch(e){ console.error('localStorage error', e); }
+}
+function isValidThaiPhone(phone){
+  const digits = phone.replace(/-/g,'').trim();
+  return /^0[0-9]{8,9}$/.test(digits);
+}
+function genCode(){
+  const n = Math.floor(1000 + Math.random()*9000);
+  return `CP-${n}`;
+}
+
+/* ============ AUTH / USERS ============ */
+/* NOTE FOR DEVELOPERS: this demo stores the password field in plain text inside
+   window.storage, which is fine for a front-end prototype but is NOT safe for a
+   real production system. Before going live, move authentication to a real
+   backend and store only a salted hash (e.g. bcrypt/argon2) — never the raw
+   password — and serve the site over HTTPS. */
+async function loadUsers(){
+  try{
+    const raw = localStorage.getItem('users');
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+async function saveUsers(list){
+  try{
+    localStorage.setItem('users', JSON.stringify(list));
+  }catch(e){ console.error('localStorage error', e); }
+}
+async function loadSession(){
+  try{
+    const raw = localStorage.getItem('session');
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+async function saveSession(userId){
+  try{ localStorage.setItem('session', JSON.stringify({ userId })); }
+  catch(e){ console.error('localStorage error', e); }
+}
+async function clearSession(){
+  try{ localStorage.removeItem('session'); }
+  catch(e){ /* nothing to clear */ }
+}
+function genUserId(){
+  return `u-${Date.now()}-${Math.floor(Math.random()*1000)}`;
+}
+async function getCurrentUser(){
+  const session = await loadSession();
+  if(!session || !session.userId) return null;
+  const users = await loadUsers();
+  return users.find(u => u.id === session.userId) || null;
+}
+
+async function updateAuthNav(){
+  const user = await getCurrentUser();
+  const el = document.getElementById('navAuth');
+  if(user){
+    el.innerHTML = `<a onclick="navigate('profile')">${user.name}</a>`;
+  }else{
+    el.innerHTML = `<a onclick="navigate('login')">เข้าสู่ระบบ</a>`;
+  }
+}
+
+function showAuthForm(which){
+  document.getElementById('loginForm').style.display = which === 'login' ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = which === 'register' ? 'block' : 'none';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('registerError').classList.remove('show');
+}
+
+async function doLogin(){
+  const phone = document.getElementById('loginPhone').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.classList.remove('show');
+
+  if(!phone || !password){
+    errEl.textContent = 'กรุณากรอกเบอร์โทรและรหัสผ่าน';
+    errEl.classList.add('show');
+    return;
+  }
+  const users = await loadUsers();
+  const user = users.find(u => u.phone.replace(/-/g,'') === phone.replace(/-/g,'') && u.password === password);
+  if(!user){
+    errEl.textContent = 'เบอร์โทรหรือรหัสผ่านไม่ถูกต้อง';
+    errEl.classList.add('show');
+    return;
+  }
+  await saveSession(user.id);
+  document.getElementById('loginPhone').value = '';
+  document.getElementById('loginPassword').value = '';
+  await updateAuthNav();
+  navigate('profile');
+}
+
+async function doRegister(){
+  const name = document.getElementById('regName').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const password2 = document.getElementById('regPassword2').value;
+  const errEl = document.getElementById('registerError');
+  errEl.classList.remove('show');
+
+  if(!name || !phone || !password || !password2){
+    errEl.textContent = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+    errEl.classList.add('show');
+    return;
+  }
+  if(password !== password2){
+    errEl.textContent = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
+    errEl.classList.add('show');
+    return;
+  }
+  if(!isValidThaiPhone(phone)){
+    errEl.textContent = 'กรุณากรอกเบอร์โทรให้ถูกต้อง เช่น 081-234-5678';
+    errEl.classList.add('show');
+    return;
+  }
+  if(!document.getElementById('regPdpa').checked){
+    errEl.textContent = 'กรุณายอมรับข้อกำหนดความเป็นส่วนตัว (PDPA) ก่อนสมัครสมาชิก';
+    errEl.classList.add('show');
+    return;
+  }
+  const users = await loadUsers();
+  const exists = users.some(u => u.phone.replace(/-/g,'') === phone.replace(/-/g,''));
+  if(exists){
+    errEl.textContent = 'เบอร์โทรนี้มีบัญชีอยู่แล้ว กรุณาเข้าสู่ระบบ';
+    errEl.classList.add('show');
+    return;
+  }
+  const user = { id: genUserId(), name, phone, password, createdAt: Date.now() };
+  users.push(user);
+  await saveUsers(users);
+  await saveSession(user.id);
+  document.getElementById('regName').value = '';
+  document.getElementById('regPhone').value = '';
+  document.getElementById('regPassword').value = '';
+  document.getElementById('regPassword2').value = '';
+  await updateAuthNav();
+  navigate('profile');
+}
+
+async function doLogout(){
+  await clearSession();
+  await updateAuthNav();
+  navigate('home');
+}
+
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('registerBtn').addEventListener('click', doRegister);
+document.getElementById('loginPassword').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+document.getElementById('regPassword2').addEventListener('keydown', e => { if(e.key === 'Enter') doRegister(); });
+
+function togglePasswordField(inputId, toggleId){
+  const input = document.getElementById(inputId);
+  const toggle = document.getElementById(toggleId);
+  if(!input || !toggle) return;
+  toggle.addEventListener('click', () => {
+    input.type = input.type === 'password' ? 'text' : 'password';
+    toggle.style.color = input.type === 'text' ? 'var(--brass-dark)' : '';
+  });
+}
+togglePasswordField('loginPassword', 'loginPwToggle');
+togglePasswordField('regPassword', 'regPwToggle');
+togglePasswordField('regPassword2', 'regPw2Toggle');
+
+const PROFILE_TABS = [
+  { id:'info', label:'ข้อมูลส่วนตัว' },
+  { id:'upcoming', label:'การจองที่จะมาถึง' },
+  { id:'history', label:'ประวัติการจอง' },
+  { id:'favorites', label:'บริการโปรด' },
+  { id:'myreviews', label:'รีวิวของฉัน' },
+  { id:'password', label:'เปลี่ยนรหัสผ่าน' },
+];
+let profileActiveTab = 'info';
+
+async function renderProfilePage(){
+  const user = await getCurrentUser();
+  const card = document.getElementById('profileCard');
+  const tabsEl = document.getElementById('profileTabs');
+  const contentEl = document.getElementById('profileTabContent');
+
+  if(!user){
+    card.innerHTML = `
+      <p style="font-size:14.5px; color:var(--ink);">กรุณาเข้าสู่ระบบเพื่อดูโปรไฟล์ของคุณ</p>
+      <button class="btn btn-primary" style="width:100%; margin-top:14px;" onclick="navigate('login')">เข้าสู่ระบบ</button>
+    `;
+    tabsEl.innerHTML = '';
+    contentEl.innerHTML = '';
+    return;
+  }
+
+  card.innerHTML = `
+    <div class="avatar-lg" style="background:var(--brass);">${user.name.trim().charAt(0)}</div>
+    <h3>${user.name}</h3>
+    <div class="phone">${user.phone}</div>
+    <button class="btn btn-outline" style="width:100%; margin-top:18px;" id="logoutBtn">ออกจากระบบ</button>
+  `;
+  document.getElementById('logoutBtn').addEventListener('click', doLogout);
+
+  tabsEl.innerHTML = PROFILE_TABS.map(t => `
+    <button type="button" class="profile-tab ${profileActiveTab===t.id?'active':''}" data-tab="${t.id}">${t.label}</button>
+  `).join('');
+  tabsEl.querySelectorAll('.profile-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      profileActiveTab = btn.getAttribute('data-tab');
+      renderProfilePage();
+    });
+  });
+
+  const bookings = await loadBookings();
+  const mine = bookings
+    .filter(b => b.phone.replace(/-/g,'') === user.phone.replace(/-/g,''))
+    .sort((a,b) => b.createdAt - a.createdAt);
+  const todayStr = new Date().toISOString().slice(0,10);
+  const upcoming = mine.filter(b => b.status !== 'cancelled' && b.date >= todayStr);
+  const past = mine.filter(b => b.status === 'cancelled' || b.date < todayStr);
+
+  if(profileActiveTab === 'info'){
+    contentEl.innerHTML = `
+      <div class="lookup-card">
+        <div class="lc-meta">
+          ชื่อ-นามสกุล: ${user.name}<br>
+          เบอร์โทร: ${user.phone}<br>
+          สมาชิกตั้งแต่: ${user.createdAt ? formatThaiDate(new Date(user.createdAt).toISOString().slice(0,10)) : '-'}
+        </div>
+      </div>`;
+  }else if(profileActiveTab === 'upcoming'){
+    contentEl.innerHTML = upcoming.length ? upcoming.map(b=>renderLookupCard(b)).join('') : '<div class="empty-note">ยังไม่มีการจองที่จะมาถึง</div>';
+    attachLookupHandlers();
+  }else if(profileActiveTab === 'history'){
+    contentEl.innerHTML = mine.length ? mine.map(b=>renderLookupCard(b)).join('') : '<div class="empty-note">คุณยังไม่มีการจอง</div>';
+    attachLookupHandlers();
+  }else if(profileActiveTab === 'favorites'){
+    const favs = user.favorites || [];
+    contentEl.innerHTML = `<div class="fav-grid">${SERVICES.map(s => `
+      <div class="fav-item">
+        <span>${s.name}</span>
+        <span class="heart" data-fav="${s.id}">${favs.includes(s.id) ? '❤️' : '🤍'}</span>
+      </div>
+    `).join('')}</div>`;
+    contentEl.querySelectorAll('[data-fav]').forEach(el => {
+      el.addEventListener('click', async () => {
+        const sid = el.getAttribute('data-fav');
+        const users = await loadUsers();
+        const u = users.find(x=>x.id===user.id);
+        u.favorites = u.favorites || [];
+        if(u.favorites.includes(sid)) u.favorites = u.favorites.filter(f=>f!==sid);
+        else u.favorites.push(sid);
+        await saveUsers(users);
+        renderProfilePage();
+      });
+    });
+  }else if(profileActiveTab === 'myreviews'){
+    const reviews = await loadUserReviews();
+    const mineReviews = reviews.filter(r => r.phone && r.phone.replace(/-/g,'') === user.phone.replace(/-/g,''));
+    contentEl.innerHTML = mineReviews.length ? mineReviews.map(r => `
+      <div class="review-card">
+        <div class="rc-top"><span class="rc-name">${r.name}</span><span class="stars">${starString(r.rating)}</span></div>
+        <div class="rc-text">${r.text}</div>
+        <div class="rc-date" style="margin-top:8px;">${reviewDateLabel(r.date)}</div>
+      </div>
+    `).join('') : '<div class="empty-note">คุณยังไม่เคยเขียนรีวิว — เขียนได้ที่หน้า "รีวิว"</div>';
+  }else if(profileActiveTab === 'password'){
+    contentEl.innerHTML = `
+      <div class="pw-form">
+        <span class="field-label" style="color:var(--brass-dark);">รหัสผ่านเดิม</span>
+        <input type="password" id="pwOld" />
+        <span class="field-label" style="color:var(--brass-dark);">รหัสผ่านใหม่</span>
+        <input type="password" id="pwNew" />
+        <button class="btn btn-primary" style="margin-top:16px;" id="pwSaveBtn">บันทึกรหัสผ่านใหม่</button>
+        <div class="form-error" id="pwError">รหัสผ่านเดิมไม่ถูกต้อง หรือกรอกข้อมูลไม่ครบ</div>
+      </div>`;
+    document.getElementById('pwSaveBtn').addEventListener('click', async () => {
+      const oldPw = document.getElementById('pwOld').value;
+      const newPw = document.getElementById('pwNew').value;
+      const errEl = document.getElementById('pwError');
+      errEl.classList.remove('show');
+      if(!oldPw || !newPw || oldPw !== user.password){
+        errEl.classList.add('show');
+        return;
+      }
+      const users = await loadUsers();
+      const u = users.find(x=>x.id===user.id);
+      u.password = newPw;
+      await saveUsers(users);
+      alert('เปลี่ยนรหัสผ่านเรียบร้อยแล้ว');
+      renderProfilePage();
+    });
+  }
+}
+
+/* ============ HELPERS ============ */
+function barberById(id){ return BARBERS.find(b=>b.id===id); }
+function serviceById(id){ return SERVICES.find(s=>s.id===id); }
+function toMinutes(hhmm){ const [h,m] = hhmm.split(':').map(Number); return h*60+m; }
+function toHHMM(mins){ const h = Math.floor(mins/60).toString().padStart(2,'0'); const m = (mins%60).toString().padStart(2,'0'); return `${h}:${m}`; }
+function formatThaiDate(dateStr){
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('th-TH', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+}
+function starString(rating){
+  const full = Math.round(rating);
+  let s = '';
+  for(let i=0;i<5;i++){ s += i < full ? '★' : '<span class="muted">★</span>'; }
+  return s;
+}
+
+function generateSlots(barberId, dateStr, serviceDuration, bookings, excludeBookingId){
+  if(!dateStr) return [];
+  const d = new Date(dateStr + 'T00:00:00');
+  if(d.getDay() === CLOSED_WEEKDAY) return [];
+
+  const openMin = toMinutes(OPEN_TIME);
+  const closeMin = toMinutes(CLOSE_TIME);
+  const slots = [];
+  const now = new Date();
+  const isToday = dateStr === now.toISOString().slice(0,10);
+  const nowMin = now.getHours()*60 + now.getMinutes();
+
+  const existing = bookings.filter(b =>
+    b.barberId === barberId && b.date === dateStr && b.status !== 'cancelled' && b.id !== excludeBookingId
+  );
+
+  for(let t = openMin; t + serviceDuration <= closeMin; t += SLOT_INTERVAL){
+    if(isToday && t <= nowMin) continue;
+    const slotEnd = t + serviceDuration;
+    const conflict = existing.some(b => {
+      const s = serviceById(b.serviceId);
+      const bStart = toMinutes(b.time);
+      const bEnd = bStart + (s ? s.duration : 30);
+      return t < bEnd && bStart < slotEnd;
+    });
+    slots.push({ time: toHHMM(t), available: !conflict });
+  }
+  return slots;
+}
+
+/* ============ ROUTER ============ */
+function navigate(pageId){
+  location.hash = pageId;
+}
+function render(){
+  const hash = (location.hash || '#home').replace('#','');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + hash) ? hash : 'home';
+  document.getElementById('page-' + target).classList.add('active');
+  document.querySelectorAll('#navLinks a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('data-nav') === target);
+  });
+  window.scrollTo(0,0);
+  updateAuthNav();
+
+  if(target === 'booking') initBookingPage();
+  if(target === 'profile') renderProfilePage();
+  if(target === 'login') showAuthForm('login');
+  if(target === 'gallery') renderGallery();
+  if(target === 'reviews') renderReviews();
+  if(target === 'lookup') { /* left as-is, user searches manually */ }
+}
+window.addEventListener('hashchange', render);
+
+/* ============ RENDER: HOME ============ */
+function renderHome(){
+  document.getElementById('promoGrid').innerHTML = PROMOTIONS.map(p => `
+    <div class="promo-card">
+      <div class="tag-num">${p.tag}</div>
+      <h3>${p.title}</h3>
+      <p>${p.desc}</p>
+    </div>
+  `).join('');
+
+  const popular = SERVICES.filter(s => s.popular);
+  document.getElementById('featServiceGrid').innerHTML = popular.map(s => `
+    <div class="feat-card" data-service="${s.id}">
+      <img class="fthumb" src="${s.img}" alt="${s.name}" loading="lazy" />
+      <div class="fbody">
+        <div class="fname">${s.name}</div>
+        <div class="fmeta"><span>${s.duration} นาที</span><span class="fprice">${s.price} บาท</span></div>
+      </div>
+    </div>
+  `).join('');
+  document.querySelectorAll('#featServiceGrid .feat-card').forEach(card => {
+    card.addEventListener('click', () => {
+      bookingDraft.serviceId = card.getAttribute('data-service');
+      navigate('booking');
+    });
+  });
+
+  const fb = barberById('ploy');
+  document.getElementById('featBarber').innerHTML = `
+    <div class="avatar-lg" style="background:var(--brass)">${fb.initials}</div>
+    <div>
+      <h3>${fb.name}</h3>
+      <div class="role">${fb.role}</div>
+      <p class="spec">${fb.specialty} · ${fb.exp}</p>
+      <div class="stars">${starString(fb.rating)} <span style="color:rgba(234,243,255,0.6); font-size:13px;">${fb.rating} (${fb.reviews} รีวิว)</span></div>
+      <button class="btn btn-primary" style="margin-top:14px;" id="featBarberBtn">จองกับช่างคนนี้</button>
+    </div>
+  `;
+  document.getElementById('featBarberBtn').addEventListener('click', () => {
+    bookingDraft.barberId = fb.id;
+    navigate('booking');
+  });
+}
+
+/* ============ RENDER: SERVICES ============ */
+function renderServices(){
+  document.getElementById('serviceList').innerHTML = SERVICES.map(s => `
+    <div class="service-row">
+      <img class="sthumb" src="${s.img}" alt="${s.name}" loading="lazy" />
+      <div class="sname"><div class="n">${s.name}</div><div class="d">${s.desc} · ${s.duration} นาที</div></div>
+      <div class="sprice">${s.price} บาท</div>
+      <button class="btn btn-outline" data-service="${s.id}">เลือกบริการ</button>
+    </div>
+  `).join('');
+  document.querySelectorAll('#serviceList [data-service]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      bookingDraft.serviceId = btn.getAttribute('data-service');
+      navigate('booking');
+    });
+  });
+}
+
+/* ============ RENDER: BARBERS ============ */
+function renderBarbers(){
+  document.getElementById('barberDetailGrid').innerHTML = BARBERS.map(b => `
+    <div class="barber-card">
+      <div class="avatar" style="background:${b.color}">${b.initials}</div>
+      <h3>${b.name}</h3>
+      <div class="role">${b.role}</div>
+      <div class="spec">${b.specialty}</div>
+      <div class="exp">${b.exp}</div>
+      <div class="stars" style="margin-bottom:14px;">${starString(b.rating)}</div>
+      <div class="rating-line" style="margin:-10px 0 14px;">${b.rating} คะแนน (${b.reviews} รีวิว)</div>
+      <button class="btn btn-dark" data-barber="${b.id}">จองกับช่างคนนี้</button>
+    </div>
+  `).join('');
+  document.querySelectorAll('#barberDetailGrid [data-barber]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      bookingDraft.barberId = btn.getAttribute('data-barber');
+      navigate('booking');
+    });
+  });
+}
+
+/* ============ GALLERY PAGE ============ */
+const GALLERY_CATS = [
+  { id:'all', label:'ทั้งหมด' },
+  { id:'cut', label:'ตัดผม' },
+  { id:'color', label:'ทำสี' },
+  { id:'perm', label:'ดัดผม' },
+  { id:'straight', label:'ยืดผม' },
+  { id:'updo', label:'ทรงผมออกงาน' },
+  { id:'treatment', label:'ทรีตเมนต์' },
+];
+let galleryActiveCat = 'all';
+function renderGalleryFilters(){
+  document.getElementById('galleryFilters').innerHTML = GALLERY_CATS.map(c => `
+    <button type="button" class="gallery-filter ${galleryActiveCat===c.id?'active':''}" data-cat="${c.id}">${c.label}</button>
+  `).join('');
+  document.querySelectorAll('.gallery-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      galleryActiveCat = btn.getAttribute('data-cat');
+      renderGalleryFilters();
+      renderGalleryGrid();
+    });
+  });
+}
+function renderGalleryGrid(){
+  const items = galleryActiveCat === 'all' ? GALLERY_ITEMS : GALLERY_ITEMS.filter(g => g.cat === galleryActiveCat);
+  document.getElementById('galleryGrid').innerHTML = items.map(g => `
+    <div class="gallery-item">
+      <img src="${g.img}" alt="${g.label}" loading="lazy" />
+      <div class="gi-cap">${g.label}</div>
+    </div>
+  `).join('');
+}
+function renderGallery(){
+  renderGalleryFilters();
+  renderGalleryGrid();
+}
+
+/* ============ REVIEWS PAGE ============ */
+async function loadUserReviews(){
+  try{
+    const raw = localStorage.getItem('reviews');
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+async function saveUserReviews(list){
+  try{ localStorage.setItem('reviews', JSON.stringify(list)); }
+  catch(e){ console.error('localStorage error', e); }
+}
+function reviewDateLabel(dateStr){
+  try{ return formatThaiDate(dateStr.length===10 && dateStr.includes('-') ? dateStr : new Date(dateStr).toISOString().slice(0,10)); }
+  catch(e){ return dateStr; }
+}
+async function renderReviews(){
+  const userReviews = await loadUserReviews();
+  const all = [...userReviews, ...STATIC_REVIEWS].sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+
+  const avg = (all.reduce((sum,r)=>sum+r.rating,0) / all.length).toFixed(1);
+  document.getElementById('reviewSummary').innerHTML = `
+    <div class="rs-score">${avg}</div>
+    <div>
+      <div class="stars">${starString(Number(avg))}</div>
+      <div class="rating-line">จากทั้งหมด ${all.length} รีวิว</div>
+    </div>
+  `;
+
+  document.getElementById('reviewList').innerHTML = all.map(r => `
+    <div class="review-card">
+      <div class="rc-top">
+        <span class="rc-name">${r.name}</span>
+        <span class="stars">${starString(r.rating)}</span>
+      </div>
+      ${r.barberId ? `<div class="rc-barber">ใช้บริการกับ ${barberById(r.barberId) ? barberById(r.barberId).name : ''}</div>` : ''}
+      <div class="rc-text">${r.text}</div>
+      <div class="rc-date" style="margin-top:8px;">${r.date ? reviewDateLabel(r.date) : ''}</div>
+    </div>
+  `).join('');
+
+  const user = await getCurrentUser();
+  const formNote = document.querySelector('#reviewForm p');
+  const formInner = document.getElementById('reviewFormInner');
+  if(user){
+    formNote.style.display = 'none';
+    formInner.style.display = 'block';
+  }else{
+    formNote.style.display = 'block';
+    formInner.style.display = 'none';
+  }
+}
+
+let selectedStarRating = 0;
+document.querySelectorAll('#starPicker span').forEach(star => {
+  star.addEventListener('click', () => {
+    selectedStarRating = parseInt(star.getAttribute('data-v'), 10);
+    document.querySelectorAll('#starPicker span').forEach(s => {
+      s.classList.toggle('on', parseInt(s.getAttribute('data-v'),10) <= selectedStarRating);
+    });
+  });
+});
+document.getElementById('reviewSubmitBtn').addEventListener('click', async () => {
+  const errEl = document.getElementById('reviewError');
+  const text = document.getElementById('reviewText').value.trim();
+  errEl.classList.remove('show');
+  if(!selectedStarRating || !text){
+    errEl.classList.add('show');
+    return;
+  }
+  const user = await getCurrentUser();
+  if(!user) return;
+  const reviews = await loadUserReviews();
+  reviews.push({
+    name: user.name,
+    phone: user.phone,
+    rating: selectedStarRating,
+    text,
+    date: new Date().toISOString().slice(0,10),
+    createdAt: Date.now(),
+  });
+  await saveUserReviews(reviews);
+  document.getElementById('reviewText').value = '';
+  selectedStarRating = 0;
+  document.querySelectorAll('#starPicker span').forEach(s => s.classList.remove('on'));
+  renderReviews();
+});
+
+/* ============ BOOKING PAGE ============ */
+let bkState = { serviceId:null, barberId:null, date:null, time:null };
+
+async function initBookingPage(){
+  bkState.serviceId = bookingDraft.serviceId || bkState.serviceId;
+  bkState.barberId = bookingDraft.barberId || bkState.barberId;
+  bookingDraft = { serviceId:null, barberId:null };
+
+  document.getElementById('bkDate').min = new Date().toISOString().slice(0,10);
+
+  const user = await getCurrentUser();
+  if(user){
+    const nameEl = document.getElementById('bkName');
+    const phoneEl = document.getElementById('bkPhone');
+    if(!nameEl.value) nameEl.value = user.name;
+    if(!phoneEl.value) phoneEl.value = user.phone;
+  }
+
+  renderServiceChoices();
+  renderBarberChoices();
+  refreshSlots();
+  updateSummary();
+}
+
+function renderServiceChoices(){
+  const el = document.getElementById('bkServiceChoices');
+  el.innerHTML = SERVICES.map(s => `
+    <div class="choice-card ${bkState.serviceId===s.id?'selected':''}" data-service="${s.id}">
+      <div><div class="cc-title">${s.name}</div><div class="cc-sub">${s.duration} นาที</div></div>
+      <div class="cc-right">${s.price} บาท</div>
+    </div>
+  `).join('');
+  el.querySelectorAll('.choice-card').forEach(card => {
+    card.addEventListener('click', () => {
+      bkState.serviceId = card.getAttribute('data-service');
+      bkState.time = null;
+      renderServiceChoices(); refreshSlots(); updateSummary();
+    });
+  });
+}
+function renderBarberChoices(){
+  const el = document.getElementById('bkBarberChoices');
+  el.innerHTML = BARBERS.map(b => `
+    <div class="choice-card ${bkState.barberId===b.id?'selected':''}" data-barber="${b.id}">
+      <div><div class="cc-title">${b.name}</div><div class="cc-sub">${b.specialty}</div></div>
+      <div class="cc-right">★ ${b.rating}</div>
+    </div>
+  `).join('');
+  el.querySelectorAll('.choice-card').forEach(card => {
+    card.addEventListener('click', () => {
+      bkState.barberId = card.getAttribute('data-barber');
+      bkState.time = null;
+      renderBarberChoices(); refreshSlots(); updateSummary();
+    });
+  });
+}
+
+document.getElementById('bkDate').addEventListener('change', () => {
+  bkState.date = document.getElementById('bkDate').value;
+  bkState.time = null;
+  refreshSlots(); updateSummary();
+});
+
+async function refreshSlots(){
+  const area = document.getElementById('bkSlotArea');
+  const closedNote = document.getElementById('bkClosedNote');
+  if(!bkState.serviceId || !bkState.barberId || !bkState.date){
+    area.innerHTML = '<div class="slot-empty">กรุณาเลือกบริการ ช่าง และวันที่ก่อน</div>';
+    closedNote.style.display = 'none';
+    return;
+  }
+  const d = new Date(bkState.date + 'T00:00:00');
+  if(d.getDay() === CLOSED_WEEKDAY){
+    area.innerHTML = '';
+    closedNote.style.display = 'block';
+    return;
+  }
+  closedNote.style.display = 'none';
+
+  const service = serviceById(bkState.serviceId);
+  const bookings = await loadBookings();
+  const slots = generateSlots(bkState.barberId, bkState.date, service.duration, bookings);
+
+  if(slots.length === 0){
+    area.innerHTML = '<div class="slot-empty">ไม่มีเวลาว่างสำหรับวันนี้ กรุณาเลือกวันอื่น</div>';
+    return;
+  }
+  area.innerHTML = `<div class="slot-grid">${slots.map(s => `
+    <button type="button" class="slot-btn ${bkState.time===s.time?'selected':''}" data-time="${s.time}" ${s.available?'':'disabled'}>
+      <span><i class="dot"></i> ${s.time}</span><span class="st">${s.available?'ว่าง':'ไม่ว่าง'}</span>
+    </button>
+  `).join('')}</div>`;
+  area.querySelectorAll('.slot-btn:not(:disabled)').forEach(btn => {
+    btn.addEventListener('click', () => {
+      bkState.time = btn.getAttribute('data-time');
+      refreshSlots(); updateSummary();
+    });
+  });
+}
+
+function updateSummary(){
+  const s = serviceById(bkState.serviceId);
+  const b = barberById(bkState.barberId);
+  document.getElementById('sumService').textContent = s ? s.name : 'ยังไม่ได้เลือก';
+  document.getElementById('sumBarber').textContent = b ? b.name : 'ยังไม่ได้เลือก';
+  document.getElementById('sumDate').textContent = bkState.date ? formatThaiDate(bkState.date) : 'ยังไม่ได้เลือก';
+  document.getElementById('sumTime').textContent = bkState.time ? `${bkState.time} น.` : 'ยังไม่ได้เลือก';
+  document.getElementById('sumPrice').textContent = s ? `${s.price} บาท` : '—';
+  document.getElementById('sumDuration').textContent = s ? `${s.duration} นาที` : '—';
+  const peopleVal = parseInt(document.getElementById('bkPeople').value, 10);
+  document.getElementById('sumPeople').textContent = `${(peopleVal && peopleVal > 0) ? peopleVal : 1} คน`;
+}
+document.getElementById('bkPeople').addEventListener('input', updateSummary);
+
+document.getElementById('bkSubmitBtn').addEventListener('click', async () => {
+  const name = document.getElementById('bkName').value.trim();
+  const phone = document.getElementById('bkPhone').value.trim();
+  const note = document.getElementById('bkNote').value.trim();
+  const peopleRaw = parseInt(document.getElementById('bkPeople').value, 10);
+  const people = (peopleRaw && peopleRaw > 0) ? peopleRaw : 1;
+  const errEl = document.getElementById('bkError');
+
+  if(!bkState.serviceId || !bkState.barberId || !bkState.date || !bkState.time || !name || !phone){
+    errEl.textContent = 'กรุณาเลือกบริการ ช่าง วันที่ เวลา และกรอกชื่อ-เบอร์โทรให้ครบ';
+    errEl.classList.add('show');
+    return;
+  }
+  if(!isValidThaiPhone(phone)){
+    errEl.textContent = 'กรุณากรอกเบอร์โทรให้ถูกต้อง เช่น 081-234-5678';
+    errEl.classList.add('show');
+    return;
+  }
+  errEl.classList.remove('show');
+
+  const bookings = await loadBookings();
+  const booking = {
+    id: `${Date.now()}-${Math.floor(Math.random()*1000)}`,
+    code: genCode(),
+    serviceId: bkState.serviceId,
+    barberId: bkState.barberId,
+    date: bkState.date,
+    time: bkState.time,
+    name, phone, note, people,
+    status: 'pending',
+    createdAt: Date.now(),
+  };
+  bookings.push(booking);
+  await saveBookings(bookings);
+  currentSuccessBooking = booking;
+  renderSuccessPage(booking);
+
+  bkState = { serviceId:null, barberId:null, date:null, time:null };
+  document.getElementById('bkName').value = '';
+  document.getElementById('bkPhone').value = '';
+  document.getElementById('bkNote').value = '';
+  document.getElementById('bkDate').value = '';
+  document.getElementById('bkPeople').value = '1';
+
+  navigate('success');
+});
+
+/* ============ SUCCESS PAGE ============ */
+function statusLabel(status){
+  return status === 'confirmed' ? 'ยืนยันแล้ว' : status === 'cancelled' ? 'ยกเลิกแล้ว' : 'รอดำเนินการ';
+}
+function renderSuccessPage(booking){
+  const s = serviceById(booking.serviceId);
+  const b = barberById(booking.barberId);
+  const cancelled = booking.status === 'cancelled';
+  document.getElementById('successTicket').innerHTML = `
+    <div class="check">✓</div>
+    <div class="label" style="text-align:center;">จองคิวสำเร็จ</div>
+    <div class="code">${booking.code}</div>
+    <div class="grid2">
+      <div><span>บริการ</span>${s.name}</div>
+      <div><span>ช่าง</span>${b.name}</div>
+      <div><span>วันที่</span>${formatThaiDate(booking.date)}</div>
+      <div><span>เวลา</span>${booking.time} น.</div>
+      <div><span>ราคา</span>${s.price} บาท</div>
+      <div><span>จำนวนคน</span>${booking.people || 1} คน</div>
+    </div>
+    <div style="text-align:center;"><span class="status-badge">${statusLabel(booking.status)}</span></div>
+    <p style="font-size:13px; color:#8A7368; margin-top:16px;">เก็บรหัสการจองนี้ไว้ตรวจสอบหรือยกเลิกคิวในภายหลัง</p>
+  `;
+  const calBtn = document.getElementById('successCalendarBtn');
+  const cancelBtn = document.getElementById('successCancelBtn');
+  if(calBtn) calBtn.style.display = cancelled ? 'none' : 'inline-block';
+  if(cancelBtn) cancelBtn.style.display = cancelled ? 'none' : 'inline-block';
+}
+
+function downloadICS(booking){
+  const s = serviceById(booking.serviceId);
+  const b = barberById(booking.barberId);
+  const start = new Date(`${booking.date}T${booking.time}:00`);
+  const end = new Date(start.getTime() + (s.duration || 30) * 60000);
+  const fmt = d => d.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+  const ics = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ซาลอน เจริญผล//จองคิว//TH','BEGIN:VEVENT',
+    `UID:${booking.code}@charoenphon-salon`,
+    `DTSTAMP:${fmt(new Date())}`,
+    `DTSTART:${fmt(start)}`,
+    `DTEND:${fmt(end)}`,
+    `SUMMARY:${s.name} กับ ${b.name} (${booking.code})`,
+    'LOCATION:ซอยเจริญกรุง 45 เขตบางรัก กรุงเทพฯ 10500',
+    `DESCRIPTION:การจองคิวที่ซาลอน เจริญผล รหัส ${booking.code}`,
+    'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `${booking.code}.ics`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('successCalendarBtn').addEventListener('click', () => {
+  if(currentSuccessBooking) downloadICS(currentSuccessBooking);
+});
+document.getElementById('successCancelBtn').addEventListener('click', async () => {
+  if(!currentSuccessBooking) return;
+  if(!confirm('ยืนยันยกเลิกคิวนี้?')) return;
+  const bookings = await loadBookings();
+  const updated = bookings.map(bk => bk.id === currentSuccessBooking.id ? { ...bk, status:'cancelled' } : bk);
+  await saveBookings(updated);
+  currentSuccessBooking = { ...currentSuccessBooking, status:'cancelled' };
+  renderSuccessPage(currentSuccessBooking);
+});
+
+/* ============ LOOKUP PAGE ============ */
+document.getElementById('lookupBtn').addEventListener('click', doLookup);
+document.getElementById('lookupInput').addEventListener('keydown', (e) => { if(e.key === 'Enter') doLookup(); });
+
+async function doLookup(){
+  const q = document.getElementById('lookupInput').value.trim();
+  const resultsEl = document.getElementById('lookupResults');
+  if(!q){ resultsEl.innerHTML = '<div class="empty-note">กรุณากรอกรหัสการจองหรือเบอร์โทร</div>'; return; }
+
+  const bookings = await loadBookings();
+  const qNorm = q.replace(/-/g,'').toLowerCase();
+  const matches = bookings.filter(b =>
+    b.code.replace(/-/g,'').toLowerCase() === qNorm ||
+    b.phone.replace(/-/g,'') === q.replace(/-/g,'')
+  ).sort((a,b)=>b.createdAt-a.createdAt);
+
+  if(matches.length === 0){
+    resultsEl.innerHTML = '<div class="empty-note">ไม่พบการจองที่ตรงกับข้อมูลนี้</div>';
+    return;
+  }
+  resultsEl.innerHTML = matches.map(b => renderLookupCard(b)).join('');
+  attachLookupHandlers();
+}
+
+function renderLookupCard(b){
+  const s = serviceById(b.serviceId);
+  const barber = barberById(b.barberId);
+  const cancelled = b.status === 'cancelled';
+  return `
+    <div class="lookup-card" data-id="${b.id}">
+      <div class="lc-top">
+        <div class="lc-code">${b.code}</div>
+        <span class="badge ${b.status}">${statusLabel(b.status)}</span>
+      </div>
+      <div class="lc-meta">
+        บริการ: ${s.name}<br>
+        ช่าง: ${barber.name}<br>
+        วันเวลา: ${formatThaiDate(b.date)} เวลา ${b.time} น.<br>
+        ${b.people ? `จำนวนผู้ใช้บริการ: ${b.people} คน<br>` : ''}
+        ${b.note ? `หมายเหตุ: ${b.note}<br>` : ''}
+      </div>
+      ${!cancelled ? `
+      <div class="lc-actions">
+        <button class="btn btn-outline btn-small" data-edit="${b.id}">แก้ไขวัน/เวลา</button>
+        <button class="btn btn-outline btn-small" data-cancel="${b.id}" style="color:var(--rust); border-color:var(--rust);">ยกเลิกคิว</button>
+      </div>
+      <div class="edit-block" id="edit-${b.id}">
+        <span class="field-label" style="color:var(--brass-dark);">เลือกวันที่ใหม่</span>
+        <input type="text" style="display:none;" />
+        <input type="date" id="editDate-${b.id}" min="${new Date().toISOString().slice(0,10)}" style="max-width:220px; background:#fff; color:var(--ink); border-color:#E3CBB8;" />
+        <div id="editSlotArea-${b.id}" style="margin-top:12px;"></div>
+        <div style="margin-top:14px;">
+          <button class="btn btn-dark btn-small" data-save="${b.id}">บันทึกการเปลี่ยนแปลง</button>
+        </div>
+      </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+let editState = {};
+
+function attachLookupHandlers(){
+  document.querySelectorAll('[data-cancel]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if(!confirm('ยืนยันยกเลิกคิวนี้?')) return;
+      const id = btn.getAttribute('data-cancel');
+      const bookings = await loadBookings();
+      const updated = bookings.map(b => b.id === id ? { ...b, status:'cancelled' } : b);
+      await saveBookings(updated);
+      doLookup();
+    });
+  });
+
+  document.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-edit');
+      const block = document.getElementById('edit-' + id);
+      block.classList.toggle('open');
+      if(block.classList.contains('open')){
+        editState[id] = { date:null, time:null };
+        const dateInput = document.getElementById('editDate-' + id);
+        dateInput.addEventListener('change', () => {
+          editState[id].date = dateInput.value;
+          editState[id].time = null;
+          refreshEditSlots(id);
+        });
+      }
+    });
+  });
+
+  document.querySelectorAll('[data-save]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.getAttribute('data-save');
+      const st = editState[id];
+      if(!st || !st.date || !st.time){ alert('กรุณาเลือกวันและเวลาใหม่'); return; }
+      const bookings = await loadBookings();
+      const updated = bookings.map(b => b.id === id ? { ...b, date:st.date, time:st.time, status:'pending' } : b);
+      await saveBookings(updated);
+      doLookup();
+    });
+  });
+}
+
+async function refreshEditSlots(id){
+  const bookings = await loadBookings();
+  const booking = bookings.find(b => b.id === id);
+  const service = serviceById(booking.serviceId);
+  const st = editState[id];
+  const area = document.getElementById('editSlotArea-' + id);
+
+  const d = new Date(st.date + 'T00:00:00');
+  if(d.getDay() === CLOSED_WEEKDAY){
+    area.innerHTML = '<div class="closed-note">ร้านปิดทุกวันจันทร์ กรุณาเลือกวันอื่น</div>';
+    return;
+  }
+  const slots = generateSlots(booking.barberId, st.date, service.duration, bookings, id);
+  if(slots.length === 0){
+    area.innerHTML = '<div class="slot-empty">ไม่มีเวลาว่างสำหรับวันนี้</div>';
+    return;
+  }
+  area.innerHTML = `<div class="slot-grid">${slots.map(s => `
+    <button type="button" class="slot-btn ${st.time===s.time?'selected':''}" data-etime="${s.time}" ${s.available?'':'disabled'} style="background:var(--paper); color:var(--ink); border-color:#E3CBB8;">
+      <span><i class="dot"></i> ${s.time}</span><span class="st">${s.available?'ว่าง':'ไม่ว่าง'}</span>
+    </button>
+  `).join('')}</div>`;
+  area.querySelectorAll('[data-etime]:not(:disabled)').forEach(b2 => {
+    b2.addEventListener('click', () => {
+      editState[id].time = b2.getAttribute('data-etime');
+      refreshEditSlots(id);
+    });
+  });
+}
+
+/* ============ INIT ============ */
+function init(){
+  renderHome();
+  renderServices();
+  renderBarbers();
+  render();
+}
+init();
+</script>
+</body>
+</html>
