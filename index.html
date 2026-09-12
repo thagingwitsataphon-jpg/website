@@ -753,7 +753,7 @@
       <div class="info-row">ตรวจสอบหรือยกเลิกคิวได้ทุกเมื่อด้วยเบอร์โทร</div>
     </div>
   </div>
-  <div class="foot-note">ข้อมูลการจองในเว็บนี้เก็บแบบใช้ร่วมกัน ผู้ที่เปิดหน้านี้ทุกคนจะเห็นและค้นหาข้อมูลชุดเดียวกัน</div>
+  <div class="foot-note">ข้อมูลตัวอย่าง (เดโม): การจองที่สร้างในเบราว์เซอร์นี้จะถูกบันทึกไว้ในเครื่องนี้เครื่องเดียวเท่านั้น เพื่อสาธิตการทำงานของระบบ — ไม่ได้เชื่อมต่อกับเซิร์ฟเวอร์กลาง หากทำเป็นเว็บไซต์ใช้งานจริง ควรมีฐานข้อมูลกลางฝั่งเซิร์ฟเวอร์เพื่อให้ร้านและลูกค้าเห็นข้อมูลชุดเดียวกันอย่างปลอดภัย</div>
 </section>
 
 <script>
@@ -812,7 +812,14 @@ const CLOSED_WEEKDAY = 1; // Monday
 let bookingDraft = { serviceId:null, barberId:null };
 let currentSuccessBooking = null;
 
-/* ============ STORAGE ============ */
+/* ============ STORAGE ============
+   หมายเหตุ (โปรเจกต์เดโม/งานส่งอาจารย์):
+   ไฟล์นี้เก็บข้อมูลด้วย localStorage ของเบราว์เซอร์ ซึ่งข้อมูลจะอยู่ "เฉพาะเครื่อง/เบราว์เซอร์
+   ที่ใช้จองเท่านั้น" ไม่ได้ถูกแชร์ไปยังเครื่องอื่นหรือผู้ใช้คนอื่นจริง ๆ (คนละคนคนละชุดข้อมูล)
+   เหมาะสำหรับสาธิตการทำงานของระบบ (flow การจอง/ยกเลิก/ค้นหา) ในเครื่องเดียว
+   ถ้าจะนำไปใช้งานจริงกับลูกค้าหลายคนพร้อมกัน ต้องมีฐานข้อมูลฝั่งเซิร์ฟเวอร์ (เช่น Node.js + DB)
+   เพื่อให้ทุกคนเห็นคิวว่าง/ไม่ว่างชุดเดียวกันจริง ๆ และเก็บรหัสผ่านแบบเข้ารหัส (hash) ไม่ใช่ข้อความล้วน
+*/
 async function loadBookings(){
   try{
     const raw = localStorage.getItem('bookings');
@@ -835,7 +842,7 @@ function genCode(){
 
 /* ============ AUTH / USERS ============ */
 /* NOTE FOR DEVELOPERS: this demo stores the password field in plain text inside
-   window.storage, which is fine for a front-end prototype but is NOT safe for a
+   localStorage, which is fine for a front-end prototype but is NOT safe for a
    real production system. Before going live, move authentication to a real
    backend and store only a salted hash (e.g. bcrypt/argon2) — never the raw
    password — and serve the site over HTTPS. */
@@ -1573,7 +1580,7 @@ function renderSuccessPage(booking){
       <div><span>จำนวนคน</span>${booking.people || 1} คน</div>
     </div>
     <div style="text-align:center;"><span class="status-badge">${statusLabel(booking.status)}</span></div>
-    <p style="font-size:13px; color:#8A7368; margin-top:16px;">เก็บรหัสการจองนี้ไว้ตรวจสอบหรือยกเลิกคิวในภายหลัง</p>
+    <p style="font-size:13px; color:#8A7368; margin-top:16px;">เก็บรหัสการจองนี้ไว้ตรวจสอบหรือยกเลิกคิวในภายหลัง — กด "เพิ่มลงปฏิทิน" เพื่อรับการเตือนก่อนถึงเวลานัด</p>
   `;
   const calBtn = document.getElementById('successCalendarBtn');
   const cancelBtn = document.getElementById('successCancelBtn');
@@ -1596,6 +1603,11 @@ function downloadICS(booking){
     `SUMMARY:${s.name} กับ ${b.name} (${booking.code})`,
     'LOCATION:ซอยเจริญกรุง 45 เขตบางรัก กรุงเทพฯ 10500',
     `DESCRIPTION:การจองคิวที่ซาลอน เจริญผล รหัส ${booking.code}`,
+    'BEGIN:VALARM',
+    'TRIGGER:-PT1H',
+    'ACTION:DISPLAY',
+    `DESCRIPTION:แจ้งเตือน: คิว ${s.name} ที่ซาลอน เจริญผล จะเริ่มในอีก 1 ชั่วโมง`,
+    'END:VALARM',
     'END:VEVENT','END:VCALENDAR'
   ].join('\r\n');
   const blob = new Blob([ics], { type:'text/calendar;charset=utf-8' });
