@@ -242,12 +242,61 @@
   }
 
   /* ---------- PROFILE PAGE ---------- */
-  .profile-shell{display:grid; grid-template-columns:280px 1fr; gap:30px;}
-  .profile-card{background:var(--paper-2); border:1px solid var(--line); border-radius:6px; padding:26px; align-self:start; text-align:center;}
-  .profile-card .avatar-lg{margin:0 auto 14px;}
-  .profile-card h3{color:var(--ink);}
+  .profile-shell{display:grid; grid-template-columns:260px 1fr 240px; gap:24px; align-items:start;}
+  .profile-card{background:var(--paper-2); border:1px solid var(--line); border-radius:10px; padding:24px 20px; text-align:center; position:sticky; top:84px;}
+  .profile-card .avatar-wrap{position:relative; width:84px; height:84px; margin:0 auto 14px;}
+  .profile-card .avatar-lg{width:84px; height:84px; margin:0; font-size:26px; overflow:hidden;}
+  .profile-card .avatar-lg img{width:100%; height:100%; object-fit:cover; border-radius:50%;}
+  .profile-card .avatar-cam{position:absolute; right:-2px; bottom:-2px; width:26px; height:26px; border-radius:50%; background:var(--ink); color:var(--cream); display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer; border:2px solid var(--paper-2);}
+  .profile-card .avatar-cam:hover{background:var(--rust);}
+  .profile-card h3{color:var(--ink); display:inline-flex; align-items:center; gap:6px; justify-content:center; font-size:18px;}
+  .profile-card .edit-name{cursor:pointer; font-size:12px; color:#B39A8E;}
+  .profile-card .edit-name:hover{color:var(--brass-dark);}
   .profile-card .phone{color:var(--brass-dark); font-size:13.5px; margin-top:4px;}
-  @media (max-width:760px){ .profile-shell{grid-template-columns:1fr;} }
+  .profile-side-nav{list-style:none; margin:20px 0 0; padding:0; text-align:left; display:flex; flex-direction:column; gap:4px;}
+  .profile-side-nav li{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 12px; border-radius:8px; font-size:14px; color:#6B5854; cursor:pointer;}
+  .profile-side-nav li:hover{background:rgba(196,112,123,0.08);}
+  .profile-side-nav li.active{background:var(--ink); color:var(--cream); font-weight:500;}
+  .profile-side-nav .psn-count{font-size:11px; background:var(--rust); color:#fff; border-radius:10px; padding:1px 7px; min-width:18px; text-align:center;}
+  .profile-side-nav li.active .psn-count{background:var(--brass);}
+  .profile-side-logout{margin-top:14px; width:100%;}
+  .profile-quote{margin-top:20px; padding:16px; border-radius:8px; background:linear-gradient(160deg, var(--ink), var(--rust)); color:var(--cream); font-family:'Taviraj',serif; font-size:14px; line-height:1.5; text-align:left;}
+
+  .profile-hero{border-radius:10px; overflow:hidden; background:linear-gradient(120deg, var(--ink) 0%, var(--rust) 75%, var(--brass) 130%); color:var(--cream); padding:26px 28px; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;}
+  .profile-hero .ph-left{display:flex; align-items:center; gap:16px;}
+  .profile-hero .avatar-lg{width:64px; height:64px; font-size:20px; min-width:64px;}
+  .profile-hero h3{color:var(--cream); font-size:20px;}
+  .profile-hero p{font-size:13.5px; color:rgba(234,243,255,0.8); margin-top:4px;}
+  .profile-hero .ph-media{width:120px; height:80px; border-radius:8px; overflow:hidden; flex-shrink:0;}
+  .profile-hero .ph-media img{width:100%; height:100%; object-fit:cover; display:block;}
+  @media (max-width:600px){ .profile-hero .ph-media{display:none;} }
+
+  .profile-pills{display:flex; gap:8px; flex-wrap:wrap; margin:20px 0 18px;}
+  .profile-pill{font-size:13.5px; padding:9px 18px; border-radius:20px; cursor:pointer; color:#6B5854; background:var(--paper-2); border:1px solid var(--line);}
+  .profile-pill.active{background:var(--rust); color:#fff; border-color:var(--rust);}
+
+  .history-row{display:flex; align-items:center; gap:14px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin-bottom:10px;}
+  .history-row .hr-thumb{width:56px; height:56px; min-width:56px; border-radius:8px; object-fit:cover; background:var(--paper-2);}
+  .history-row .hr-main{flex:1; min-width:0;}
+  .history-row .hr-main .n{font-size:15px; font-weight:500;}
+  .history-row .hr-main .d{font-size:12.5px; color:#8A7368; margin-top:3px;}
+  .history-row .hr-right{text-align:right; white-space:nowrap;}
+
+  .notif-item{display:flex; gap:12px; align-items:flex-start; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin-bottom:10px;}
+  .notif-item .ni-dot{width:8px; height:8px; border-radius:50%; background:var(--rust); margin-top:6px; flex-shrink:0;}
+  .notif-item .ni-text{font-size:14px;}
+  .notif-item .ni-time{font-size:12px; color:#8A7368; margin-top:3px;}
+
+  .profile-rail{display:flex; flex-direction:column; gap:14px; position:sticky; top:84px;}
+  .rail-card{background:var(--paper-2); border:1px solid var(--line); border-radius:10px; padding:16px; display:flex; align-items:center; justify-content:space-between; gap:8px; cursor:pointer; font-size:14px;}
+  .rail-card:hover{border-color:var(--rust);}
+  .rail-promo{background:linear-gradient(150deg, var(--rust), var(--brass)); color:#fff; border-radius:10px; padding:20px; text-align:left;}
+  .rail-promo h4{font-family:'Taviraj',serif; font-size:17px; margin-bottom:6px;}
+  .rail-promo p{font-size:13px; color:rgba(255,255,255,0.85); margin-bottom:14px;}
+  .rail-promo .btn{background:#fff; color:var(--ink); width:100%; text-align:center; padding:10px;}
+
+  @media (max-width:960px){ .profile-shell{grid-template-columns:220px 1fr;} .profile-rail{display:none;} }
+  @media (max-width:760px){ .profile-shell{grid-template-columns:1fr;} .profile-card{position:static;} }
 
   /* ---------- SUCCESS PAGE ---------- */
   .success-wrap{max-width:480px; margin:0 auto; text-align:center;}
@@ -721,10 +770,13 @@
       <div class="profile-shell">
         <div class="profile-card" id="profileCard"></div>
         <div id="profileMain">
-          <div class="profile-tabs" id="profileTabs"></div>
+          <div class="profile-hero" id="profileHero"></div>
+          <div class="profile-pills" id="profilePills"></div>
           <div id="profileTabContent"></div>
         </div>
+        <div class="profile-rail" id="profileRail"></div>
       </div>
+      <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" />
     </div>
   </section>
 </div>
@@ -880,7 +932,16 @@ async function updateAuthNav(){
   const user = await getCurrentUser();
   const el = document.getElementById('navAuth');
   if(user){
-    el.innerHTML = `<a onclick="navigate('profile')">${user.name}</a>`;
+    const bookings = await loadBookings();
+    const mine = bookingsForUser(bookings, user);
+    const todayStr = new Date().toISOString().slice(0,10);
+    const upcomingCount = mine.filter(b => b.status !== 'cancelled' && b.date >= todayStr).length;
+    el.innerHTML = `
+      <span style="position:relative; cursor:pointer; margin-right:4px;" id="navBell" title="การแจ้งเตือน">🔔${upcomingCount ? `<span style="position:absolute; top:-6px; right:-8px; background:var(--rust); color:#fff; font-size:10px; border-radius:8px; padding:1px 5px;">${upcomingCount}</span>` : ''}</span>
+      <a onclick="navigate('profile')">${user.name}</a>
+    `;
+    const bell = document.getElementById('navBell');
+    if(bell) bell.addEventListener('click', () => { profileActiveTab = 'notifications'; navigate('profile'); });
   }else{
     el.innerHTML = `<a onclick="navigate('login')">เข้าสู่ระบบ</a>`;
   }
@@ -990,80 +1051,165 @@ togglePasswordField('regPassword', 'regPwToggle');
 togglePasswordField('regPassword2', 'regPw2Toggle');
 
 const PROFILE_TABS = [
-  { id:'info', label:'ข้อมูลส่วนตัว' },
-  { id:'upcoming', label:'การจองที่จะมาถึง' },
-  { id:'history', label:'ประวัติการจอง' },
-  { id:'favorites', label:'บริการโปรด' },
-  { id:'myreviews', label:'รีวิวของฉัน' },
-  { id:'password', label:'เปลี่ยนรหัสผ่าน' },
+  { id:'info', label:'ข้อมูลส่วนตัว', icon:'👤' },
+  { id:'history', label:'ประวัติการจอง', icon:'📅' },
+  { id:'notifications', label:'การแจ้งเตือน', icon:'🔔' },
+  { id:'settings', label:'ตั้งค่าบัญชี', icon:'⚙️' },
 ];
-let profileActiveTab = 'info';
+let profileActiveTab = 'history';
+
+function bookingsForUser(bookings, user){
+  return bookings
+    .filter(b => b && typeof b.phone === 'string' && b.phone.replace(/-/g,'') === user.phone.replace(/-/g,''))
+    .sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+}
+
+async function setAvatarFromFile(file, user){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async () => {
+    const users = await loadUsers();
+    const u = users.find(x=>x.id===user.id);
+    if(u){
+      u.avatarUrl = reader.result;
+      await saveUsers(users);
+      renderProfilePage();
+    }
+  };
+  reader.readAsDataURL(file);
+}
 
 async function renderProfilePage(){
   const user = await getCurrentUser();
   const card = document.getElementById('profileCard');
-  const tabsEl = document.getElementById('profileTabs');
+  const heroEl = document.getElementById('profileHero');
+  const pillsEl = document.getElementById('profilePills');
   const contentEl = document.getElementById('profileTabContent');
+  const railEl = document.getElementById('profileRail');
 
   if(!user){
     card.innerHTML = `
       <p style="font-size:14.5px; color:var(--ink);">กรุณาเข้าสู่ระบบเพื่อดูโปรไฟล์ของคุณ</p>
       <button class="btn btn-primary" style="width:100%; margin-top:14px;" onclick="navigate('login')">เข้าสู่ระบบ</button>
     `;
-    tabsEl.innerHTML = '';
+    heroEl.innerHTML = '';
+    pillsEl.innerHTML = '';
     contentEl.innerHTML = '';
+    railEl.innerHTML = '';
     return;
   }
 
+  const bookings = await loadBookings();
+  const mine = bookingsForUser(bookings, user);
+  const todayStr = new Date().toISOString().slice(0,10);
+  const upcoming = mine.filter(b => b.status !== 'cancelled' && b.date >= todayStr);
+
+  const avatarInner = user.avatarUrl
+    ? `<img src="${user.avatarUrl}" alt="${user.name}" />`
+    : user.name.trim().charAt(0);
+
+  /* ---- Sidebar ---- */
   card.innerHTML = `
-    <div class="avatar-lg" style="background:var(--brass);">${user.name.trim().charAt(0)}</div>
-    <h3>${user.name}</h3>
+    <div class="avatar-wrap">
+      <div class="avatar-lg" style="background:var(--brass);">${avatarInner}</div>
+      <div class="avatar-cam" id="avatarCamBtn" title="เปลี่ยนรูปโปรไฟล์">📷</div>
+    </div>
+    <h3>${user.name} <span class="edit-name" id="editNameBtn" title="แก้ไขชื่อ">✎</span></h3>
     <div class="phone">${user.phone}</div>
-    <button class="btn btn-outline" style="width:100%; margin-top:18px;" id="logoutBtn">ออกจากระบบ</button>
+    <ul class="profile-side-nav" id="profileSideNav">
+      ${PROFILE_TABS.map(t => `
+        <li data-tab="${t.id}" class="${profileActiveTab===t.id?'active':''}">
+          <span>${t.icon} ${t.label}</span>
+          ${t.id==='notifications' && upcoming.length ? `<span class="psn-count">${upcoming.length}</span>` : ''}
+        </li>
+      `).join('')}
+    </ul>
+    <button class="btn btn-outline profile-side-logout" id="logoutBtn">ออกจากระบบ</button>
+    <div class="profile-quote">“สวยได้…ในแบบคุณ”<br><span style="font-size:12px; opacity:0.8;">ขอบคุณที่ไว้วางใจให้เราดูแลคุณ</span></div>
   `;
   document.getElementById('logoutBtn').addEventListener('click', doLogout);
+  card.querySelectorAll('.profile-side-nav li').forEach(li => {
+    li.addEventListener('click', () => {
+      profileActiveTab = li.getAttribute('data-tab');
+      renderProfilePage();
+    });
+  });
+  document.getElementById('avatarCamBtn').addEventListener('click', () => {
+    document.getElementById('avatarFileInput').click();
+  });
+  document.getElementById('avatarFileInput').onchange = (e) => {
+    setAvatarFromFile(e.target.files[0], user);
+    e.target.value = '';
+  };
+  document.getElementById('editNameBtn').addEventListener('click', async () => {
+    const newName = prompt('แก้ไขชื่อของคุณ', user.name);
+    if(!newName || !newName.trim()) return;
+    const users = await loadUsers();
+    const u = users.find(x=>x.id===user.id);
+    u.name = newName.trim();
+    await saveUsers(users);
+    renderProfilePage();
+  });
 
-  tabsEl.innerHTML = PROFILE_TABS.map(t => `
-    <button type="button" class="profile-tab ${profileActiveTab===t.id?'active':''}" data-tab="${t.id}">${t.label}</button>
+  /* ---- Hero ---- */
+  heroEl.innerHTML = `
+    <div class="ph-left">
+      <div class="avatar-lg" style="background:var(--brass);">${avatarInner}</div>
+      <div>
+        <h3>สวัสดี, ${user.name}</h3>
+        <p>สวยในแบบที่เป็นคุณ — ดูแลเส้นผมให้เป็นเรื่องง่ายสำหรับคุณ 💇‍♀️</p>
+      </div>
+    </div>
+    <div class="ph-media"><img src="./images/salonhero.jpg" alt="ร้านเสริมสวยก้อย" loading="lazy" /></div>
+  `;
+
+  /* ---- Pills (mirror sidebar tabs, excluding "info" which the hero already covers) ---- */
+  const pillTabs = PROFILE_TABS.filter(t => t.id !== 'info');
+  const pillActive = pillTabs.some(t=>t.id===profileActiveTab) ? profileActiveTab : 'history';
+  pillsEl.innerHTML = pillTabs.map(t => `
+    <button type="button" class="profile-pill ${pillActive===t.id?'active':''}" data-tab="${t.id}">${t.label}</button>
   `).join('');
-  tabsEl.querySelectorAll('.profile-tab').forEach(btn => {
+  pillsEl.querySelectorAll('.profile-pill').forEach(btn => {
     btn.addEventListener('click', () => {
       profileActiveTab = btn.getAttribute('data-tab');
       renderProfilePage();
     });
   });
 
-  const bookings = await loadBookings();
-  const mine = bookings
-    .filter(b => b.phone.replace(/-/g,'') === user.phone.replace(/-/g,''))
-    .sort((a,b) => b.createdAt - a.createdAt);
-  const todayStr = new Date().toISOString().slice(0,10);
-  const upcoming = mine.filter(b => b.status !== 'cancelled' && b.date >= todayStr);
-  const past = mine.filter(b => b.status === 'cancelled' || b.date < todayStr);
+  /* ---- Rail (quick links + promo) ---- */
+  railEl.innerHTML = `
+    <div class="rail-card" data-tab="history"><span>📅 ประวัติการจอง</span><span class="psn-count" style="background:var(--rust);">${mine.length}</span></div>
+    <div class="rail-card" data-tab="notifications"><span>🔔 การแจ้งเตือน</span><span class="psn-count" style="background:var(--rust);">${upcoming.length}</span></div>
+    <div class="rail-promo">
+      <h4>สวยได้… ในแบบคุณ</h4>
+      <p>ขอบคุณที่ไว้วางใจให้เราดูแลคุณ</p>
+      <button class="btn" id="railBookBtn">จองคิวเลย →</button>
+    </div>
+  `;
+  railEl.querySelectorAll('.rail-card').forEach(el => {
+    el.addEventListener('click', () => { profileActiveTab = el.getAttribute('data-tab'); renderProfilePage(); });
+  });
+  document.getElementById('railBookBtn').addEventListener('click', () => navigate('booking'));
 
+  /* ---- Tab content ---- */
   if(profileActiveTab === 'info'){
+    const favs = user.favorites || [];
     contentEl.innerHTML = `
-      <div class="lookup-card">
+      <div class="lookup-card" style="margin-bottom:14px;">
         <div class="lc-meta">
           ชื่อ-นามสกุล: ${user.name}<br>
           เบอร์โทร: ${user.phone}<br>
           สมาชิกตั้งแต่: ${user.createdAt ? formatThaiDate(new Date(user.createdAt).toISOString().slice(0,10)) : '-'}
         </div>
-      </div>`;
-  }else if(profileActiveTab === 'upcoming'){
-    contentEl.innerHTML = upcoming.length ? upcoming.map(b=>renderLookupCard(b)).join('') : '<div class="empty-note">ยังไม่มีการจองที่จะมาถึง</div>';
-    attachLookupHandlers();
-  }else if(profileActiveTab === 'history'){
-    contentEl.innerHTML = mine.length ? mine.map(b=>renderLookupCard(b)).join('') : '<div class="empty-note">คุณยังไม่มีการจอง</div>';
-    attachLookupHandlers();
-  }else if(profileActiveTab === 'favorites'){
-    const favs = user.favorites || [];
-    contentEl.innerHTML = `<div class="fav-grid">${SERVICES.map(s => `
-      <div class="fav-item">
-        <span>${s.name}</span>
-        <span class="heart" data-fav="${s.id}">${favs.includes(s.id) ? '❤️' : '🤍'}</span>
       </div>
-    `).join('')}</div>`;
+      <div class="field-label" style="margin-top:0; color:var(--brass-dark);">บริการโปรดของคุณ</div>
+      <div class="fav-grid">${SERVICES.map(s => `
+        <div class="fav-item">
+          <span>${s.name}</span>
+          <span class="heart" data-fav="${s.id}">${favs.includes(s.id) ? '❤️' : '🤍'}</span>
+        </div>
+      `).join('')}</div>
+    `;
     contentEl.querySelectorAll('[data-fav]').forEach(el => {
       el.addEventListener('click', async () => {
         const sid = el.getAttribute('data-fav');
@@ -1076,23 +1222,76 @@ async function renderProfilePage(){
         renderProfilePage();
       });
     });
-  }else if(profileActiveTab === 'myreviews'){
-    const reviews = await loadUserReviews();
-    const mineReviews = reviews.filter(r => r.phone && r.phone.replace(/-/g,'') === user.phone.replace(/-/g,''));
-    contentEl.innerHTML = mineReviews.length ? mineReviews.map(r => `
-      <div class="review-card">
-        <div class="rc-top"><span class="rc-name">${r.name}</span><span class="stars">${starString(r.rating)}</span></div>
-        <div class="rc-text">${r.text}</div>
-        <div class="rc-date" style="margin-top:8px;">${reviewDateLabel(r.date)}</div>
-      </div>
-    `).join('') : '<div class="empty-note">คุณยังไม่เคยเขียนรีวิว — เขียนได้ที่หน้า "รีวิว"</div>';
-  }else if(profileActiveTab === 'password'){
+  }else if(profileActiveTab === 'history'){
+    if(!mine.length){
+      contentEl.innerHTML = '<div class="empty-note">คุณยังไม่มีการจอง</div>';
+    }else{
+      contentEl.innerHTML = mine.map(b => {
+        const s = serviceById(b.serviceId);
+        return `
+          <div class="history-row" data-id="${b.id}">
+            <img class="hr-thumb" src="${s.img}" alt="${s.name}" loading="lazy" />
+            <div class="hr-main">
+              <div class="n">${s.name}</div>
+              <div class="d">${formatThaiDate(b.date)} · ${b.time} น.</div>
+            </div>
+            <div class="hr-right">
+              <span class="badge ${b.status}">${statusLabel(b.status)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+      contentEl.querySelectorAll('.history-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const id = row.getAttribute('data-id');
+          const b = mine.find(x=>x.id===id);
+          if(!b) return;
+          contentEl.innerHTML = renderLookupCard(b);
+          attachLookupHandlers();
+          const backBtn = document.createElement('button');
+          backBtn.className = 'btn btn-outline';
+          backBtn.style.marginTop = '14px';
+          backBtn.textContent = '← กลับไปประวัติการจองทั้งหมด';
+          backBtn.addEventListener('click', renderProfilePage);
+          contentEl.appendChild(backBtn);
+        });
+      });
+      contentEl.insertAdjacentHTML('beforeend', `
+        <div class="field-label" style="color:var(--brass-dark);">รีวิวของฉัน</div>
+      `);
+      const reviews = await loadUserReviews();
+      const mineReviews = reviews.filter(r => r.phone && r.phone.replace(/-/g,'') === user.phone.replace(/-/g,''));
+      contentEl.insertAdjacentHTML('beforeend', mineReviews.length ? mineReviews.map(r => `
+        <div class="review-card">
+          <div class="rc-top"><span class="rc-name">${r.name}</span><span class="stars">${starString(r.rating)}</span></div>
+          <div class="rc-text">${r.text}</div>
+          <div class="rc-date" style="margin-top:8px;">${reviewDateLabel(r.date)}</div>
+        </div>
+      `).join('') : '<div class="empty-note">คุณยังไม่เคยเขียนรีวิว — เขียนได้ที่หน้า "รีวิว"</div>');
+    }
+  }else if(profileActiveTab === 'notifications'){
+    if(!upcoming.length){
+      contentEl.innerHTML = '<div class="empty-note">ไม่มีการแจ้งเตือนในขณะนี้</div>';
+    }else{
+      contentEl.innerHTML = upcoming.map(b => {
+        const s = serviceById(b.serviceId);
+        return `
+          <div class="notif-item">
+            <div class="ni-dot"></div>
+            <div>
+              <div class="ni-text">การจอง <b>${b.code}</b> (${s.name}) ของคุณกำลังจะถึง</div>
+              <div class="ni-time">${formatThaiDate(b.date)} เวลา ${b.time} น. — สถานะ: ${statusLabel(b.status)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }else if(profileActiveTab === 'settings'){
     contentEl.innerHTML = `
+      <div class="field-label" style="margin-top:0; color:var(--brass-dark);">เปลี่ยนรหัสผ่าน</div>
       <div class="pw-form">
-        <span class="field-label" style="color:var(--brass-dark);">รหัสผ่านเดิม</span>
-        <input type="password" id="pwOld" />
-        <span class="field-label" style="color:var(--brass-dark);">รหัสผ่านใหม่</span>
-        <input type="password" id="pwNew" />
+        <input type="password" id="pwOld" placeholder="รหัสผ่านเดิม" style="margin-bottom:10px;" />
+        <input type="password" id="pwNew" placeholder="รหัสผ่านใหม่" />
         <button class="btn btn-primary" style="margin-top:16px;" id="pwSaveBtn">บันทึกรหัสผ่านใหม่</button>
         <div class="form-error" id="pwError">รหัสผ่านเดิมไม่ถูกต้อง หรือกรอกข้อมูลไม่ครบ</div>
       </div>`;
@@ -1116,8 +1315,10 @@ async function renderProfilePage(){
 }
 
 /* ============ HELPERS ============ */
-function barberById(id){ return BARBERS.find(b=>b.id===id); }
-function serviceById(id){ return SERVICES.find(s=>s.id===id); }
+const UNKNOWN_SERVICE = { id:'unknown', name:'บริการที่ไม่พบข้อมูล', desc:'', price:'-', duration:30, popular:false, img:'./images/svc-cut.jpg' };
+const UNKNOWN_BARBER = { id:'unknown', name:'ไม่พบข้อมูลช่าง', role:'', specialty:'', exp:'', initials:'-', color:'var(--sage)', rating:0, reviews:0 };
+function barberById(id){ return BARBERS.find(b=>b.id===id) || UNKNOWN_BARBER; }
+function serviceById(id){ return SERVICES.find(s=>s.id===id) || UNKNOWN_SERVICE; }
 function toMinutes(hhmm){ const [h,m] = hhmm.split(':').map(Number); return h*60+m; }
 function toHHMM(mins){ const h = Math.floor(mins/60).toString().padStart(2,'0'); const m = (mins%60).toString().padStart(2,'0'); return `${h}:${m}`; }
 function formatThaiDate(dateStr){
@@ -1634,19 +1835,25 @@ async function doLookup(){
   const resultsEl = document.getElementById('lookupResults');
   if(!q){ resultsEl.innerHTML = '<div class="empty-note">กรุณากรอกรหัสการจองหรือเบอร์โทร</div>'; return; }
 
-  const bookings = await loadBookings();
-  const qNorm = q.replace(/-/g,'').toLowerCase();
-  const matches = bookings.filter(b =>
-    b.code.replace(/-/g,'').toLowerCase() === qNorm ||
-    b.phone.replace(/-/g,'') === q.replace(/-/g,'')
-  ).sort((a,b)=>b.createdAt-a.createdAt);
+  try{
+    const bookings = await loadBookings();
+    const qNorm = q.replace(/-/g,'').toLowerCase();
+    const qPhoneNorm = q.replace(/-/g,'');
+    const matches = bookings.filter(b =>
+      b && typeof b.code === 'string' && typeof b.phone === 'string' &&
+      (b.code.replace(/-/g,'').toLowerCase() === qNorm || b.phone.replace(/-/g,'') === qPhoneNorm)
+    ).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
 
-  if(matches.length === 0){
-    resultsEl.innerHTML = '<div class="empty-note">ไม่พบการจองที่ตรงกับข้อมูลนี้</div>';
-    return;
+    if(matches.length === 0){
+      resultsEl.innerHTML = '<div class="empty-note">ไม่พบการจองที่ตรงกับข้อมูลนี้</div>';
+      return;
+    }
+    resultsEl.innerHTML = matches.map(b => renderLookupCard(b)).join('');
+    attachLookupHandlers();
+  }catch(err){
+    console.error('doLookup error', err);
+    resultsEl.innerHTML = '<div class="empty-note">เกิดข้อผิดพลาดในการค้นหา กรุณาลองใหม่อีกครั้ง</div>';
   }
-  resultsEl.innerHTML = matches.map(b => renderLookupCard(b)).join('');
-  attachLookupHandlers();
 }
 
 function renderLookupCard(b){
