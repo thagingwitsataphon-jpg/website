@@ -425,12 +425,6 @@
         <div class="hero-media">
           <img src="./images/ChatGPT Image 13 ก.ย. 2569 19_26_59.png" alt="บรรยากาศร้านเสริมสวยก้อย" loading="lazy" />
         </div>
-        <div class="hero-card">
-          <div class="label">โปรโมชั่นประจำเดือนนี้</div>
-          <h3>แพ็กเกจตัด + สระ + ทรีตเมนต์</h3>
-          <div class="row"><span>ราคาปกติ 750 บาท</span><b style="color:var(--rust)">เหลือ 650 บาท</b></div>
-          <div class="row"><span>ใช้ได้ถึง</span><b>สิ้นเดือนนี้</b></div>
-        </div>
       </div>
     </div>
   </header>
@@ -1152,20 +1146,14 @@ async function renderProfilePage(){
     });
   });
 
-  /* ---- Rail (quick links + promo) ---- */
+  /* ---- Rail (quick links) ---- */
   railEl.innerHTML = `
     <div class="rail-card" data-tab="history"><span>📅 ประวัติการจอง</span><span class="psn-count" style="background:var(--rust);">${mine.length}</span></div>
     <div class="rail-card" data-tab="notifications"><span>🔔 การแจ้งเตือน</span><span class="psn-count" style="background:var(--rust);">${upcoming.length}</span></div>
-    <div class="rail-promo">
-      <h4>สวยได้… ในแบบคุณ</h4>
-      <p>ขอบคุณที่ไว้วางใจให้เราดูแลคุณ</p>
-      <button class="btn" id="railBookBtn">จองคิวเลย →</button>
-    </div>
   `;
   railEl.querySelectorAll('.rail-card').forEach(el => {
     el.addEventListener('click', () => { profileActiveTab = el.getAttribute('data-tab'); renderProfilePage(); });
   });
-  document.getElementById('railBookBtn').addEventListener('click', () => navigate('booking'));
 
   /* ---- Tab content ---- */
   if(profileActiveTab === 'info'){
