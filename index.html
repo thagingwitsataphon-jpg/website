@@ -74,14 +74,6 @@
   .hero-card .row{display:flex; justify-content:space-between; font-size:13.5px; margin-top:14px; border-top:1px dashed var(--line); padding-top:12px;}
   @media (max-width:760px){ .hero .wrap{grid-template-columns:1fr;} .hero h1{font-size:36px;} }
 
-  /* ---------- PROMOS ---------- */
-  .promo-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
-  .promo-card{background:var(--paper-2); border:1px dashed var(--brass); border-radius:4px; padding:22px;}
-  .promo-card .tag-num{font-family:'Taviraj',serif; font-size:14px; color:var(--rust); margin-bottom:8px;}
-  .promo-card h3{font-size:18px;}
-  .promo-card p{font-size:13.5px; color:#6B5854; margin-top:8px;}
-  @media (max-width:800px){ .promo-grid{grid-template-columns:1fr;} }
-
   /* ---------- FEATURED SERVICES (home) ---------- */
   .feat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
   .feat-card{background:var(--paper); border:1px solid var(--line); border-radius:4px; padding:22px; cursor:pointer; transition:border-color .15s;}
@@ -442,16 +434,6 @@
       </div>
     </div>
   </header>
-
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <div class="eyebrow">โปรโมชั่น</div>
-        <h2>ดีลพิเศษสำหรับลูกค้า</h2>
-      </div>
-      <div class="promo-grid" id="promoGrid"></div>
-    </div>
-  </section>
 
   <section style="background:var(--paper-2);">
     <div class="wrap">
@@ -843,12 +825,6 @@ const STATIC_REVIEWS = [
   { name:'คุณพิมพ์', barberId:'koi', rating:4, text:'ยืดผมออกมาเรียบสวยเป็นธรรมชาติดี บริการเป็นกันเอง', date:'2026-07-18', static:true },
   { name:'คุณอรุณี', barberId:'koi', rating:5, text:'จองคิวออนไลน์สะดวกมาก ไม่ต้องรอคิวหน้าร้านเลย', date:'2026-06-25', static:true },
   { name:'คุณวารี', barberId:'koi', rating:5, text:'ทรีตเมนต์บำรุงผมช่วยได้เยอะมาก ผมนุ่มลื่นขึ้นจริง', date:'2026-06-02', static:true },
-];
-
-const PROMOTIONS = [
-  { tag:'ทุกวันอังคาร', title:'โปรอังคารสุขใจ', desc:'ลดทุกบริการ 10% เฉพาะวันอังคารตลอดวัน' },
-  { tag:'แนะนำเพื่อน', title:'ชวนเพื่อนมาทำผม', desc:'แนะนำเพื่อนมาใช้บริการ รับส่วนลดคนละ 50 บาท' },
-  { tag:'แพ็กเกจ', title:'ตัด + สระ + ทรีตเมนต์', desc:'ราคาพิเศษ 650 บาท จากปกติ 750 บาท ถึงสิ้นเดือนนี้' },
 ];
 
 const OPEN_TIME = '08:00';
@@ -1388,14 +1364,6 @@ window.addEventListener('hashchange', render);
 
 /* ============ RENDER: HOME ============ */
 function renderHome(){
-  document.getElementById('promoGrid').innerHTML = PROMOTIONS.map(p => `
-    <div class="promo-card">
-      <div class="tag-num">${p.tag}</div>
-      <h3>${p.title}</h3>
-      <p>${p.desc}</p>
-    </div>
-  `).join('');
-
   const popular = SERVICES.filter(s => s.popular);
   document.getElementById('featServiceGrid').innerHTML = popular.map(s => `
     <div class="feat-card" data-service="${s.id}">
