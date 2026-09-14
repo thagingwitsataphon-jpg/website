@@ -137,6 +137,7 @@
   textarea{resize:vertical; min-height:70px;}
   input[type=date]{color-scheme:dark;}
   .closed-note{font-size:13px; color:#D9534F; margin-top:8px;}
+  .field-hint{font-size:12.5px; color:rgba(234,243,255,0.55); margin-top:6px;}
 
   .slot-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
   .slot-btn{padding:10px 4px; text-align:center; font-size:13.5px; background:rgba(234,243,255,0.05); border:1px solid rgba(234,243,255,0.2); border-radius:3px; color:var(--cream); cursor:pointer;}
@@ -542,6 +543,7 @@
 
           <span class="field-label">เลือกวันที่</span>
           <input type="date" id="bkDate" />
+          <div class="field-hint">* จองล่วงหน้าได้สูงสุด 3 วัน</div>
           <div class="closed-note" id="bkClosedNote" style="display:none;">ร้านปิดวันนี้ กรุณาเลือกวันอื่น</div>
 
           <span class="field-label">เลือกเวลา</span>
@@ -825,6 +827,12 @@ const OPEN_TIME = '08:00';
 const CLOSE_TIME = '19:00';
 const SLOT_INTERVAL = 30; // minutes
 const CLOSED_WEEKDAY = -1; // ร้านเปิดทุกวัน ไม่มีวันหยุด
+const MAX_ADVANCE_DAYS = 3; // จองล่วงหน้าได้ไม่เกินกี่วันนับจากวันนี้
+function getMaxBookingDateStr(){
+  const d = new Date();
+  d.setDate(d.getDate() + MAX_ADVANCE_DAYS);
+  return d.toISOString().slice(0,10);
+}
 
 let bookingDraft = { serviceId:null, barberId:null };
 let currentSuccessBooking = null;
@@ -1558,6 +1566,7 @@ async function initBookingPage(){
   bookingDraft = { serviceId:null, barberId:null };
 
   document.getElementById('bkDate').min = new Date().toISOString().slice(0,10);
+  document.getElementById('bkDate').max = getMaxBookingDateStr();
 
   const user = await getCurrentUser();
   if(user){
@@ -1607,7 +1616,15 @@ function renderBarberChoices(){
 }
 
 document.getElementById('bkDate').addEventListener('change', () => {
-  bkState.date = document.getElementById('bkDate').value;
+  let picked = document.getElementById('bkDate').value;
+  const minStr = new Date().toISOString().slice(0,10);
+  const maxStr = getMaxBookingDateStr();
+  if(picked && (picked < minStr || picked > maxStr)){
+    alert(`กรุณาเลือกวันที่ระหว่างวันนี้ถึงอีก ${MAX_ADVANCE_DAYS} วันข้างหน้าเท่านั้น`);
+    picked = '';
+    document.getElementById('bkDate').value = '';
+  }
+  bkState.date = picked;
   bkState.time = null;
   refreshSlots(); updateSummary();
 });
@@ -1663,13 +1680,16 @@ function updateSummary(){
 }
 document.getElementById('bkPeople').addEventListener('input', updateSummary);
 
+let bkSubmitting = false;
 document.getElementById('bkSubmitBtn').addEventListener('click', async () => {
+  if(bkSubmitting) return; // ป้องกันการกดซ้ำ/กดรัว ๆ จนสร้างคิวซ้อนกัน
   const name = document.getElementById('bkName').value.trim();
   const phone = document.getElementById('bkPhone').value.trim();
   const note = document.getElementById('bkNote').value.trim();
   const peopleRaw = parseInt(document.getElementById('bkPeople').value, 10);
   const people = (peopleRaw && peopleRaw > 0) ? peopleRaw : 1;
   const errEl = document.getElementById('bkError');
+  const submitBtn = document.getElementById('bkSubmitBtn');
 
   if(!bkState.serviceId || !bkState.barberId || !bkState.date || !bkState.time || !name || !phone){
     errEl.textContent = 'กรุณาเลือกบริการ ช่าง วันที่ เวลา และกรอกชื่อ-เบอร์โทรให้ครบ';
@@ -1681,33 +1701,69 @@ document.getElementById('bkSubmitBtn').addEventListener('click', async () => {
     errEl.classList.add('show');
     return;
   }
+  const minStr = new Date().toISOString().slice(0,10);
+  const maxStr = getMaxBookingDateStr();
+  if(bkState.date < minStr || bkState.date > maxStr){
+    errEl.textContent = `กรุณาเลือกวันที่ระหว่างวันนี้ถึงอีก ${MAX_ADVANCE_DAYS} วันข้างหน้าเท่านั้น`;
+    errEl.classList.add('show');
+    return;
+  }
   errEl.classList.remove('show');
 
-  const bookings = await loadBookings();
-  const booking = {
-    id: `${Date.now()}-${Math.floor(Math.random()*1000)}`,
-    code: genCode(),
-    serviceId: bkState.serviceId,
-    barberId: bkState.barberId,
-    date: bkState.date,
-    time: bkState.time,
-    name, phone, note, people,
-    status: 'pending',
-    createdAt: Date.now(),
-  };
-  bookings.push(booking);
-  await saveBookings(bookings);
-  currentSuccessBooking = booking;
-  renderSuccessPage(booking);
+  bkSubmitting = true;
+  submitBtn.disabled = true;
+  try{
+    const service = serviceById(bkState.serviceId);
+    const bookings = await loadBookings();
 
-  bkState = { serviceId:null, barberId:null, date:null, time:null };
-  document.getElementById('bkName').value = '';
-  document.getElementById('bkPhone').value = '';
-  document.getElementById('bkNote').value = '';
-  document.getElementById('bkDate').value = '';
-  document.getElementById('bkPeople').value = '1';
+    /* ตรวจสอบซ้ำอีกครั้งก่อนบันทึกจริง เพื่อป้องกันเวลาจองไปทับ/ซ้ำกัน
+       (เช่น กดยืนยันซ้ำ หรือมีคนอื่นจองเวลาเดียวกันไปก่อนหน้านี้เล็กน้อย) */
+    const hasConflict = bookings.some(b => {
+      if(b.barberId !== bkState.barberId || b.date !== bkState.date || b.status === 'cancelled') return false;
+      const s2 = serviceById(b.serviceId);
+      const bStart = toMinutes(b.time);
+      const bEnd = bStart + (s2 ? s2.duration : 30);
+      const newStart = toMinutes(bkState.time);
+      const newEnd = newStart + service.duration;
+      return newStart < bEnd && bStart < newEnd;
+    });
+    if(hasConflict){
+      errEl.textContent = 'ขออภัย เวลานี้เพิ่งถูกจองไปแล้ว กรุณาเลือกเวลาอื่น';
+      errEl.classList.add('show');
+      bkState.time = null;
+      refreshSlots();
+      updateSummary();
+      return;
+    }
 
-  navigate('success');
+    const booking = {
+      id: `${Date.now()}-${Math.floor(Math.random()*1000)}`,
+      code: genCode(),
+      serviceId: bkState.serviceId,
+      barberId: bkState.barberId,
+      date: bkState.date,
+      time: bkState.time,
+      name, phone, note, people,
+      status: 'pending',
+      createdAt: Date.now(),
+    };
+    bookings.push(booking);
+    await saveBookings(bookings);
+    currentSuccessBooking = booking;
+    renderSuccessPage(booking);
+
+    bkState = { serviceId:null, barberId:null, date:null, time:null };
+    document.getElementById('bkName').value = '';
+    document.getElementById('bkPhone').value = '';
+    document.getElementById('bkNote').value = '';
+    document.getElementById('bkDate').value = '';
+    document.getElementById('bkPeople').value = '1';
+
+    navigate('success');
+  } finally {
+    bkSubmitting = false;
+    submitBtn.disabled = false;
+  }
 });
 
 /* ============ SUCCESS PAGE ============ */
@@ -1836,8 +1892,9 @@ function renderLookupCard(b){
       </div>
       <div class="edit-block" id="edit-${b.id}">
         <span class="field-label" style="color:var(--brass-dark);">เลือกวันที่ใหม่</span>
+        <div class="field-hint" style="color:#8A7368; margin-bottom:8px;">* จองล่วงหน้าได้สูงสุด ${MAX_ADVANCE_DAYS} วัน</div>
         <input type="text" style="display:none;" />
-        <input type="date" id="editDate-${b.id}" min="${new Date().toISOString().slice(0,10)}" style="max-width:220px; background:#fff; color:var(--ink); border-color:#E3CBB8;" />
+        <input type="date" id="editDate-${b.id}" min="${new Date().toISOString().slice(0,10)}" max="${getMaxBookingDateStr()}" style="max-width:220px; background:#fff; color:var(--ink); border-color:#E3CBB8;" />
         <div id="editSlotArea-${b.id}" style="margin-top:12px;"></div>
         <div style="margin-top:14px;">
           <button class="btn btn-dark btn-small" data-save="${b.id}">บันทึกการเปลี่ยนแปลง</button>
@@ -1871,7 +1928,15 @@ function attachLookupHandlers(){
         editState[id] = { date:null, time:null };
         const dateInput = document.getElementById('editDate-' + id);
         dateInput.addEventListener('change', () => {
-          editState[id].date = dateInput.value;
+          let picked = dateInput.value;
+          const minStr = new Date().toISOString().slice(0,10);
+          const maxStr = getMaxBookingDateStr();
+          if(picked && (picked < minStr || picked > maxStr)){
+            alert(`กรุณาเลือกวันที่ระหว่างวันนี้ถึงอีก ${MAX_ADVANCE_DAYS} วันข้างหน้าเท่านั้น`);
+            picked = '';
+            dateInput.value = '';
+          }
+          editState[id].date = picked;
           editState[id].time = null;
           refreshEditSlots(id);
         });
@@ -1885,6 +1950,19 @@ function attachLookupHandlers(){
       const st = editState[id];
       if(!st || !st.date || !st.time){ alert('กรุณาเลือกวันและเวลาใหม่'); return; }
       const bookings = await loadBookings();
+
+      /* ตรวจสอบซ้ำอีกครั้งก่อนบันทึก ป้องกันเวลาที่เลือกไว้ถูกคนอื่นจองไปก่อนหน้านี้ */
+      const booking = bookings.find(b => b.id === id);
+      if(!booking){ alert('ไม่พบข้อมูลการจองนี้แล้ว'); doLookup(); return; }
+      const service = serviceById(booking.serviceId);
+      const freshSlots = generateSlots(booking.barberId, st.date, service.duration, bookings, id);
+      const slotInfo = freshSlots.find(s => s.time === st.time);
+      if(!slotInfo || !slotInfo.available){
+        alert('ขออภัย เวลานี้เพิ่งถูกจองไปแล้ว กรุณาเลือกเวลาอื่น');
+        refreshEditSlots(id);
+        return;
+      }
+
       const updated = bookings.map(b => b.id === id ? { ...b, date:st.date, time:st.time, status:'pending' } : b);
       await saveBookings(updated);
       doLookup();
