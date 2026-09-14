@@ -530,16 +530,13 @@
       <div class="section-head">
         <div class="eyebrow">จองคิว</div>
         <h2>จองคิวทำผม</h2>
-        <p>เลือกบริการ ช่าง วันที่ และเวลาที่สะดวก จากนั้นกรอกข้อมูลติดต่อของคุณ</p>
+        <p>เลือกบริการ วันที่ และเวลาที่สะดวก จากนั้นกรอกข้อมูลติดต่อของคุณ</p>
       </div>
 
       <div class="booking-shell" id="bookingShell">
         <div id="bookingFormArea">
           <span class="field-label">เลือกบริการ</span>
           <div class="choice-grid" id="bkServiceChoices"></div>
-
-          <span class="field-label">เลือกช่าง</span>
-          <div class="choice-grid" id="bkBarberChoices"></div>
 
           <span class="field-label">เลือกวันที่</span>
           <input type="date" id="bkDate" />
@@ -548,7 +545,7 @@
 
           <span class="field-label">เลือกเวลา</span>
           <div class="slot-legend"><span><i class="dot dot-open"></i>ว่าง</span><span><i class="dot dot-full"></i>ไม่ว่าง</span></div>
-          <div id="bkSlotArea"><div class="slot-empty">กรุณาเลือกบริการ ช่าง และวันที่ก่อน</div></div>
+          <div id="bkSlotArea"><div class="slot-empty">กรุณาเลือกบริการและวันที่ก่อน</div></div>
 
           <span class="field-label">จำนวนผู้ใช้บริการ (ไม่บังคับ)</span>
           <input type="text" id="bkPeople" placeholder="1 คน" value="1" inputmode="numeric" style="max-width:140px;" />
@@ -564,7 +561,7 @@
 
           <div class="booking-actions">
             <button class="btn btn-primary" id="bkSubmitBtn">ยืนยันการจอง</button>
-            <div class="form-error" id="bkError">กรุณาเลือกบริการ ช่าง วันที่ เวลา และกรอกชื่อ-เบอร์โทรให้ครบ</div>
+            <div class="form-error" id="bkError">กรุณาเลือกบริการ วันที่ เวลา และกรอกชื่อ-เบอร์โทรให้ครบ</div>
           </div>
         </div>
 
@@ -1562,7 +1559,7 @@ let bkState = { serviceId:null, barberId:null, date:null, time:null };
 
 async function initBookingPage(){
   bkState.serviceId = bookingDraft.serviceId || bkState.serviceId;
-  bkState.barberId = bookingDraft.barberId || bkState.barberId;
+  bkState.barberId = BARBERS[0].id; // มีช่างคนเดียว จึงกำหนดให้อัตโนมัติ ไม่ต้องให้เลือก
   bookingDraft = { serviceId:null, barberId:null };
 
   document.getElementById('bkDate').min = new Date().toISOString().slice(0,10);
@@ -1577,7 +1574,6 @@ async function initBookingPage(){
   }
 
   renderServiceChoices();
-  renderBarberChoices();
   refreshSlots();
   updateSummary();
 }
@@ -1598,23 +1594,6 @@ function renderServiceChoices(){
     });
   });
 }
-function renderBarberChoices(){
-  const el = document.getElementById('bkBarberChoices');
-  el.innerHTML = BARBERS.map(b => `
-    <div class="choice-card ${bkState.barberId===b.id?'selected':''}" data-barber="${b.id}">
-      <div><div class="cc-title">${b.name}</div><div class="cc-sub">${b.specialty}</div></div>
-      <div class="cc-right">★ ${b.rating}</div>
-    </div>
-  `).join('');
-  el.querySelectorAll('.choice-card').forEach(card => {
-    card.addEventListener('click', () => {
-      bkState.barberId = card.getAttribute('data-barber');
-      bkState.time = null;
-      renderBarberChoices(); refreshSlots(); updateSummary();
-    });
-  });
-}
-
 document.getElementById('bkDate').addEventListener('change', () => {
   let picked = document.getElementById('bkDate').value;
   const minStr = new Date().toISOString().slice(0,10);
@@ -1633,7 +1612,7 @@ async function refreshSlots(){
   const area = document.getElementById('bkSlotArea');
   const closedNote = document.getElementById('bkClosedNote');
   if(!bkState.serviceId || !bkState.barberId || !bkState.date){
-    area.innerHTML = '<div class="slot-empty">กรุณาเลือกบริการ ช่าง และวันที่ก่อน</div>';
+    area.innerHTML = '<div class="slot-empty">กรุณาเลือกบริการและวันที่ก่อน</div>';
     closedNote.style.display = 'none';
     return;
   }
@@ -1692,7 +1671,7 @@ document.getElementById('bkSubmitBtn').addEventListener('click', async () => {
   const submitBtn = document.getElementById('bkSubmitBtn');
 
   if(!bkState.serviceId || !bkState.barberId || !bkState.date || !bkState.time || !name || !phone){
-    errEl.textContent = 'กรุณาเลือกบริการ ช่าง วันที่ เวลา และกรอกชื่อ-เบอร์โทรให้ครบ';
+    errEl.textContent = 'กรุณาเลือกบริการ วันที่ เวลา และกรอกชื่อ-เบอร์โทรให้ครบ';
     errEl.classList.add('show');
     return;
   }
