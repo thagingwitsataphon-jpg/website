@@ -951,7 +951,8 @@ async function doLogin(){
   document.getElementById('loginPhone').value = '';
   document.getElementById('loginPassword').value = '';
   await updateAuthNav();
-  navigate('profile');
+  navigate(postLoginRedirect || 'profile');
+  postLoginRedirect = null;
 }
 
 async function doRegister(){
@@ -998,7 +999,8 @@ async function doRegister(){
   document.getElementById('regPassword').value = '';
   document.getElementById('regPassword2').value = '';
   await updateAuthNav();
-  navigate('profile');
+  navigate(postLoginRedirect || 'profile');
+  postLoginRedirect = null;
 }
 
 async function doLogout(){
@@ -1332,13 +1334,25 @@ function generateSlots(barberId, dateStr, serviceDuration, bookings, excludeBook
 }
 
 /* ============ ROUTER ============ */
+let postLoginRedirect = null;
 function navigate(pageId){
   location.hash = pageId;
 }
-function render(){
+async function render(){
   const hash = (location.hash || '#home').replace('#','');
+  let target = document.getElementById('page-' + hash) ? hash : 'home';
+
+  /* ต้องเข้าสู่ระบบก่อนจึงจะเข้าหน้าจองคิวได้ */
+  if(target === 'booking'){
+    const user = await getCurrentUser();
+    if(!user){
+      postLoginRedirect = 'booking';
+      alert('กรุณาเข้าสู่ระบบก่อนทำการจองคิว');
+      target = 'login';
+    }
+  }
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const target = document.getElementById('page-' + hash) ? hash : 'home';
   document.getElementById('page-' + target).classList.add('active');
   document.querySelectorAll('#navLinks a').forEach(a => {
     a.classList.toggle('active', a.getAttribute('data-nav') === target);
@@ -1662,6 +1676,16 @@ document.getElementById('bkPeople').addEventListener('input', updateSummary);
 let bkSubmitting = false;
 document.getElementById('bkSubmitBtn').addEventListener('click', async () => {
   if(bkSubmitting) return; // ป้องกันการกดซ้ำ/กดรัว ๆ จนสร้างคิวซ้อนกัน
+
+  /* ป้องกันการจองซ้ำอีกชั้นในกรณีที่ผู้ใช้ออกจากระบบระหว่างกำลังกรอกฟอร์มอยู่ */
+  const currentUser = await getCurrentUser();
+  if(!currentUser){
+    alert('กรุณาเข้าสู่ระบบก่อนทำการจองคิว');
+    postLoginRedirect = 'booking';
+    navigate('login');
+    return;
+  }
+
   const name = document.getElementById('bkName').value.trim();
   const phone = document.getElementById('bkPhone').value.trim();
   const note = document.getElementById('bkNote').value.trim();
